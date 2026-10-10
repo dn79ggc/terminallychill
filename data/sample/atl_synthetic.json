@@ -1,0 +1,2235 @@
+{
+ "_comment": "SYNTHETIC data, invented for demos and tests. Not from any flight-data provider.",
+ "flights": [
+  {
+   "ident": "ZZ1001",
+   "operator": "ZZ",
+   "gate": "A10",
+   "terminal": "N",
+   "aircraft_type": "B737",
+   "offset_min": -13,
+   "delay_s": 0,
+   "cancelled": true
+  },
+  {
+   "ident": "ZZ1002",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": -10,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1003",
+   "operator": "ZZ",
+   "gate": "D38",
+   "terminal": "N",
+   "aircraft_type": "B737",
+   "offset_min": -9,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1004",
+   "operator": "ZZ",
+   "gate": "D7",
+   "terminal": "N",
+   "aircraft_type": "E170",
+   "offset_min": -6,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1005",
+   "operator": "ZZ",
+   "gate": "B5",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": -5,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1006",
+   "operator": "ZZ",
+   "gate": "A33",
+   "terminal": "S",
+   "aircraft_type": "E170",
+   "offset_min": -3,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1007",
+   "operator": "ZZ",
+   "gate": "A2",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": -2,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1008",
+   "operator": "ZZ",
+   "gate": "E13",
+   "terminal": "S",
+   "aircraft_type": "E170",
+   "offset_min": -2,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1009",
+   "operator": "ZZ",
+   "gate": "C5",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 0,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1010",
+   "operator": "ZZ",
+   "gate": "T7",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 0,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1011",
+   "operator": "ZZ",
+   "gate": "B18",
+   "terminal": "N",
+   "aircraft_type": "A320",
+   "offset_min": 1,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1012",
+   "operator": "ZZ",
+   "gate": "F12",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 2,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1013",
+   "operator": "ZZ",
+   "gate": "T7",
+   "terminal": "S",
+   "aircraft_type": "B737",
+   "offset_min": 2,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1014",
+   "operator": "ZZ",
+   "gate": "A26",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 3,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1015",
+   "operator": "ZZ",
+   "gate": "A24",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 3,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1016",
+   "operator": "ZZ",
+   "gate": "C42",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 4,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1017",
+   "operator": "ZZ",
+   "gate": "F1",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 4,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1018",
+   "operator": "ZZ",
+   "gate": "E13",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 6,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1019",
+   "operator": "ZZ",
+   "gate": "D28",
+   "terminal": "N",
+   "aircraft_type": "B789",
+   "offset_min": 7,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1020",
+   "operator": "ZZ",
+   "gate": "E35",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 8,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1021",
+   "operator": "ZZ",
+   "gate": "A8",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 8,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1022",
+   "operator": "ZZ",
+   "gate": "E9",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 9,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1023",
+   "operator": "ZZ",
+   "gate": "D31",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 9,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1024",
+   "operator": "ZZ",
+   "gate": "C25",
+   "terminal": "S",
+   "aircraft_type": "B737",
+   "offset_min": 10,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1025",
+   "operator": "ZZ",
+   "gate": "C4",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 11,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1026",
+   "operator": "ZZ",
+   "gate": "A23",
+   "terminal": "S",
+   "aircraft_type": "B737",
+   "offset_min": 11,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1027",
+   "operator": "ZZ",
+   "gate": "E9",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 12,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1028",
+   "operator": "ZZ",
+   "gate": "C40",
+   "terminal": "S",
+   "aircraft_type": "A21N",
+   "offset_min": 12,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1029",
+   "operator": "ZZ",
+   "gate": "A26",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 13,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1030",
+   "operator": "ZZ",
+   "gate": "D3",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 13,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1031",
+   "operator": "ZZ",
+   "gate": "B5",
+   "terminal": "S",
+   "aircraft_type": "B712",
+   "offset_min": 14,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1032",
+   "operator": "ZZ",
+   "gate": "E1",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 15,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1033",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 16,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1034",
+   "operator": "ZZ",
+   "gate": "D37",
+   "terminal": "N",
+   "aircraft_type": "B737",
+   "offset_min": 16,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1035",
+   "operator": "ZZ",
+   "gate": "A10",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 17,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1036",
+   "operator": "ZZ",
+   "gate": "B37",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 17,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1037",
+   "operator": "ZZ",
+   "gate": "A34",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 18,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1038",
+   "operator": "ZZ",
+   "gate": "A17",
+   "terminal": "S",
+   "aircraft_type": "A320",
+   "offset_min": 19,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1039",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 19,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1040",
+   "operator": "ZZ",
+   "gate": "B15",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 20,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1041",
+   "operator": "ZZ",
+   "gate": "D41",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 20,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1042",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "N",
+   "aircraft_type": "E170",
+   "offset_min": 21,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1043",
+   "operator": "ZZ",
+   "gate": "E35",
+   "terminal": "N",
+   "aircraft_type": "A21N",
+   "offset_min": 23,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1044",
+   "operator": "ZZ",
+   "gate": "E19",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 24,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1045",
+   "operator": "ZZ",
+   "gate": "E7",
+   "terminal": "S",
+   "aircraft_type": "B712",
+   "offset_min": 25,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1046",
+   "operator": "ZZ",
+   "gate": "A16",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 26,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1047",
+   "operator": "ZZ",
+   "gate": "C1",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 27,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1048",
+   "operator": "ZZ",
+   "gate": "A20",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 28,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1049",
+   "operator": "ZZ",
+   "gate": "F10",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 28,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1050",
+   "operator": "ZZ",
+   "gate": "C39",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 29,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1051",
+   "operator": "ZZ",
+   "gate": "F11",
+   "terminal": "S",
+   "aircraft_type": "A21N",
+   "offset_min": 29,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1052",
+   "operator": "ZZ",
+   "gate": "D4",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 30,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1053",
+   "operator": "ZZ",
+   "gate": "C36",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 31,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1054",
+   "operator": "ZZ",
+   "gate": "D14",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 32,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1055",
+   "operator": "ZZ",
+   "gate": "C17",
+   "terminal": "N",
+   "aircraft_type": "E170",
+   "offset_min": 33,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1056",
+   "operator": "ZZ",
+   "gate": "T6",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 34,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1057",
+   "operator": "ZZ",
+   "gate": "D5",
+   "terminal": "N",
+   "aircraft_type": "B38M",
+   "offset_min": 34,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1058",
+   "operator": "ZZ",
+   "gate": "B28",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 35,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1059",
+   "operator": "ZZ",
+   "gate": "C43",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 35,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1060",
+   "operator": "ZZ",
+   "gate": "B28",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 36,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1061",
+   "operator": "ZZ",
+   "gate": "F3",
+   "terminal": "S",
+   "aircraft_type": "B789",
+   "offset_min": 37,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1062",
+   "operator": "ZZ",
+   "gate": "B29",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 37,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1063",
+   "operator": "ZZ",
+   "gate": "B38",
+   "terminal": "S",
+   "aircraft_type": "A21N",
+   "offset_min": 38,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1064",
+   "operator": "ZZ",
+   "gate": "D2",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 39,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1065",
+   "operator": "ZZ",
+   "gate": "E5",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 40,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1066",
+   "operator": "ZZ",
+   "gate": "B38",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 40,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1067",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 41,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1068",
+   "operator": "ZZ",
+   "gate": "F9",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 41,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1069",
+   "operator": "ZZ",
+   "gate": "D2",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 44,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1070",
+   "operator": "ZZ",
+   "gate": "C8",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 45,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1071",
+   "operator": "ZZ",
+   "gate": "T3",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 45,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1072",
+   "operator": "ZZ",
+   "gate": "C18",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 46,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1073",
+   "operator": "ZZ",
+   "gate": "D24",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 48,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1074",
+   "operator": "ZZ",
+   "gate": "A19",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 48,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1075",
+   "operator": "ZZ",
+   "gate": "F12",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 49,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1076",
+   "operator": "ZZ",
+   "gate": "A3",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 49,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1077",
+   "operator": "ZZ",
+   "gate": "C28",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 52,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1078",
+   "operator": "ZZ",
+   "gate": "C21",
+   "terminal": "S",
+   "aircraft_type": "B38M",
+   "offset_min": 52,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1079",
+   "operator": "ZZ",
+   "gate": "C19",
+   "terminal": "S",
+   "aircraft_type": "B789",
+   "offset_min": 53,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1080",
+   "operator": "ZZ",
+   "gate": "B13",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 54,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1081",
+   "operator": "ZZ",
+   "gate": "B15",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 56,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1082",
+   "operator": "ZZ",
+   "gate": "A11",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 58,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1083",
+   "operator": "ZZ",
+   "gate": "B11",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 60,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1084",
+   "operator": "ZZ",
+   "gate": "B37",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 61,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1085",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "S",
+   "aircraft_type": "E170",
+   "offset_min": 63,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1086",
+   "operator": "ZZ",
+   "gate": "C13",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 63,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1087",
+   "operator": "ZZ",
+   "gate": "B15",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 65,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1088",
+   "operator": "ZZ",
+   "gate": "A12",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 65,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1089",
+   "operator": "ZZ",
+   "gate": "D2",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 67,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1090",
+   "operator": "ZZ",
+   "gate": "D42",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 74,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1091",
+   "operator": "ZZ",
+   "gate": "D25",
+   "terminal": "N",
+   "aircraft_type": "B38M",
+   "offset_min": 75,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1092",
+   "operator": "ZZ",
+   "gate": "D7",
+   "terminal": "S",
+   "aircraft_type": "B737",
+   "offset_min": 75,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1093",
+   "operator": "ZZ",
+   "gate": "C41",
+   "terminal": "S",
+   "aircraft_type": "A21N",
+   "offset_min": 77,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1094",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 78,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1095",
+   "operator": "ZZ",
+   "gate": "B25",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 79,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1096",
+   "operator": "ZZ",
+   "gate": "B30",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 79,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1097",
+   "operator": "ZZ",
+   "gate": "E35",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 80,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1098",
+   "operator": "ZZ",
+   "gate": "C28",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 83,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1099",
+   "operator": "ZZ",
+   "gate": "E20",
+   "terminal": "N",
+   "aircraft_type": "B38M",
+   "offset_min": 84,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1100",
+   "operator": "ZZ",
+   "gate": "B13",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 86,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1101",
+   "operator": "ZZ",
+   "gate": "E14",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 88,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1102",
+   "operator": "ZZ",
+   "gate": "E22",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 88,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1103",
+   "operator": "ZZ",
+   "gate": "B5",
+   "terminal": "S",
+   "aircraft_type": "B38M",
+   "offset_min": 92,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1104",
+   "operator": "ZZ",
+   "gate": "A11",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 93,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1105",
+   "operator": "ZZ",
+   "gate": "B5",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 95,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1106",
+   "operator": "ZZ",
+   "gate": "D35",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 97,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1107",
+   "operator": "ZZ",
+   "gate": "E12",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 97,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1108",
+   "operator": "ZZ",
+   "gate": "E13",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 98,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1109",
+   "operator": "ZZ",
+   "gate": "B39",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 99,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1110",
+   "operator": "ZZ",
+   "gate": "B4",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 100,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1111",
+   "operator": "ZZ",
+   "gate": "A13",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 101,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1112",
+   "operator": "ZZ",
+   "gate": "F3",
+   "terminal": "N",
+   "aircraft_type": "E170",
+   "offset_min": 101,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1113",
+   "operator": "ZZ",
+   "gate": "C34",
+   "terminal": "N",
+   "aircraft_type": "A320",
+   "offset_min": 102,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1114",
+   "operator": "ZZ",
+   "gate": "D27",
+   "terminal": "S",
+   "aircraft_type": "B38M",
+   "offset_min": 103,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1115",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "S",
+   "aircraft_type": "B712",
+   "offset_min": 104,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1116",
+   "operator": "ZZ",
+   "gate": "C24",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 104,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1117",
+   "operator": "ZZ",
+   "gate": "B37",
+   "terminal": "S",
+   "aircraft_type": "B712",
+   "offset_min": 105,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1118",
+   "operator": "ZZ",
+   "gate": "A4",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 106,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1119",
+   "operator": "ZZ",
+   "gate": "B39",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 107,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1120",
+   "operator": "ZZ",
+   "gate": "B10",
+   "terminal": "S",
+   "aircraft_type": "A21N",
+   "offset_min": 107,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1121",
+   "operator": "ZZ",
+   "gate": "B3",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 108,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1122",
+   "operator": "ZZ",
+   "gate": "A33",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 108,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1123",
+   "operator": "ZZ",
+   "gate": "B18",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 109,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1124",
+   "operator": "ZZ",
+   "gate": "F1",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 109,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1125",
+   "operator": "ZZ",
+   "gate": "F10",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 110,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1126",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "S",
+   "aircraft_type": "A320",
+   "offset_min": 111,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1127",
+   "operator": "ZZ",
+   "gate": "E25",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 111,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1128",
+   "operator": "ZZ",
+   "gate": "C10",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 113,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1129",
+   "operator": "ZZ",
+   "gate": "T5",
+   "terminal": "S",
+   "aircraft_type": "B712",
+   "offset_min": 114,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1130",
+   "operator": "ZZ",
+   "gate": "D40",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 117,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1131",
+   "operator": "ZZ",
+   "gate": "B36",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 117,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1132",
+   "operator": "ZZ",
+   "gate": "C35",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 118,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1133",
+   "operator": "ZZ",
+   "gate": "C1",
+   "terminal": "N",
+   "aircraft_type": "A320",
+   "offset_min": 118,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1134",
+   "operator": "ZZ",
+   "gate": "D25",
+   "terminal": "S",
+   "aircraft_type": "E170",
+   "offset_min": 119,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1135",
+   "operator": "ZZ",
+   "gate": "E4",
+   "terminal": "S",
+   "aircraft_type": "B38M",
+   "offset_min": 119,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1136",
+   "operator": "ZZ",
+   "gate": "C9",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 120,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1137",
+   "operator": "ZZ",
+   "gate": "E12",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 121,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1138",
+   "operator": "ZZ",
+   "gate": "F1",
+   "terminal": "S",
+   "aircraft_type": "A21N",
+   "offset_min": 121,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1139",
+   "operator": "ZZ",
+   "gate": "B7",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 122,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1140",
+   "operator": "ZZ",
+   "gate": "D33",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 123,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1141",
+   "operator": "ZZ",
+   "gate": "B21",
+   "terminal": "S",
+   "aircraft_type": "B789",
+   "offset_min": 124,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1142",
+   "operator": "ZZ",
+   "gate": "B21",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 125,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1143",
+   "operator": "ZZ",
+   "gate": "D1",
+   "terminal": "N",
+   "aircraft_type": "B737",
+   "offset_min": 126,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1144",
+   "operator": "ZZ",
+   "gate": "D26",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 127,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1145",
+   "operator": "ZZ",
+   "gate": "C20",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 127,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1146",
+   "operator": "ZZ",
+   "gate": "D22",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 128,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1147",
+   "operator": "ZZ",
+   "gate": "A22",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 129,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1148",
+   "operator": "ZZ",
+   "gate": "E11",
+   "terminal": "S",
+   "aircraft_type": "B789",
+   "offset_min": 129,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1149",
+   "operator": "ZZ",
+   "gate": "A27",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 131,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1150",
+   "operator": "ZZ",
+   "gate": "B3",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 133,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1151",
+   "operator": "ZZ",
+   "gate": "C13",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 134,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1152",
+   "operator": "ZZ",
+   "gate": "D31",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 135,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1153",
+   "operator": "ZZ",
+   "gate": "E3",
+   "terminal": "S",
+   "aircraft_type": "B712",
+   "offset_min": 136,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1154",
+   "operator": "ZZ",
+   "gate": "A30",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 137,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1155",
+   "operator": "ZZ",
+   "gate": "B29",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 138,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1156",
+   "operator": "ZZ",
+   "gate": "C44",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 139,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1157",
+   "operator": "ZZ",
+   "gate": "E25",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 140,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1158",
+   "operator": "ZZ",
+   "gate": "B26",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 141,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1159",
+   "operator": "ZZ",
+   "gate": "D25",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 144,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1160",
+   "operator": "ZZ",
+   "gate": "E30",
+   "terminal": "S",
+   "aircraft_type": "A21N",
+   "offset_min": 147,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1161",
+   "operator": "ZZ",
+   "gate": "C16",
+   "terminal": "N",
+   "aircraft_type": "B789",
+   "offset_min": 148,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1162",
+   "operator": "ZZ",
+   "gate": "A5",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 150,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1163",
+   "operator": "ZZ",
+   "gate": "B17",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 154,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1164",
+   "operator": "ZZ",
+   "gate": "A28",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 156,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1165",
+   "operator": "ZZ",
+   "gate": "D20",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 156,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1166",
+   "operator": "ZZ",
+   "gate": "E2",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 158,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1167",
+   "operator": "ZZ",
+   "gate": "C42",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 159,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1168",
+   "operator": "ZZ",
+   "gate": "D16",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 161,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1169",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "S",
+   "aircraft_type": "E170",
+   "offset_min": 161,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1170",
+   "operator": "ZZ",
+   "gate": "D10",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 162,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1171",
+   "operator": "ZZ",
+   "gate": "A17",
+   "terminal": "N",
+   "aircraft_type": "A320",
+   "offset_min": 163,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1172",
+   "operator": "ZZ",
+   "gate": "A15",
+   "terminal": "S",
+   "aircraft_type": "B38M",
+   "offset_min": 167,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1173",
+   "operator": "ZZ",
+   "gate": "E2",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 169,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1174",
+   "operator": "ZZ",
+   "gate": "B7",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 171,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1175",
+   "operator": "ZZ",
+   "gate": "E35",
+   "terminal": "N",
+   "aircraft_type": "B712",
+   "offset_min": 172,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1176",
+   "operator": "ZZ",
+   "gate": "B36",
+   "terminal": "S",
+   "aircraft_type": "B712",
+   "offset_min": 174,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1177",
+   "operator": "ZZ",
+   "gate": "C29",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 175,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1178",
+   "operator": "ZZ",
+   "gate": "B1",
+   "terminal": "S",
+   "aircraft_type": "B38M",
+   "offset_min": 177,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1179",
+   "operator": "ZZ",
+   "gate": "E5",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 178,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1180",
+   "operator": "ZZ",
+   "gate": "C10",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 179,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1181",
+   "operator": "ZZ",
+   "gate": "A13",
+   "terminal": "N",
+   "aircraft_type": "E170",
+   "offset_min": 180,
+   "delay_s": 900,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1182",
+   "operator": "ZZ",
+   "gate": "B2",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 182,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1183",
+   "operator": "ZZ",
+   "gate": "D40",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 182,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1184",
+   "operator": "ZZ",
+   "gate": "D23",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 183,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1185",
+   "operator": "ZZ",
+   "gate": "F1",
+   "terminal": "S",
+   "aircraft_type": "B789",
+   "offset_min": 185,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1186",
+   "operator": "ZZ",
+   "gate": "B39",
+   "terminal": "S",
+   "aircraft_type": "A321",
+   "offset_min": 186,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1187",
+   "operator": "ZZ",
+   "gate": "E7",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 187,
+   "delay_s": 0,
+   "cancelled": true
+  },
+  {
+   "ident": "ZZ1188",
+   "operator": "ZZ",
+   "gate": "C45",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 188,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1189",
+   "operator": "ZZ",
+   "gate": "B7",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 188,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1190",
+   "operator": "ZZ",
+   "gate": "A31",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 190,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1191",
+   "operator": "ZZ",
+   "gate": "C21",
+   "terminal": "N",
+   "aircraft_type": "A21N",
+   "offset_min": 192,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1192",
+   "operator": "ZZ",
+   "gate": "T7",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 193,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1193",
+   "operator": "ZZ",
+   "gate": "A7",
+   "terminal": "S",
+   "aircraft_type": "A320",
+   "offset_min": 193,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1194",
+   "operator": "ZZ",
+   "gate": "F12",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 194,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1195",
+   "operator": "ZZ",
+   "gate": "D20",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 194,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1196",
+   "operator": "ZZ",
+   "gate": "C17",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 196,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1197",
+   "operator": "ZZ",
+   "gate": "D37",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 199,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1198",
+   "operator": "ZZ",
+   "gate": "E1",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 200,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1199",
+   "operator": "ZZ",
+   "gate": "E27",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 203,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1200",
+   "operator": "ZZ",
+   "gate": "D24",
+   "terminal": "S",
+   "aircraft_type": "CRJ9",
+   "offset_min": 203,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1201",
+   "operator": "ZZ",
+   "gate": "T6",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 204,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1202",
+   "operator": "ZZ",
+   "gate": null,
+   "terminal": "N",
+   "aircraft_type": "A320",
+   "offset_min": 206,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1203",
+   "operator": "ZZ",
+   "gate": "B37",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 207,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1204",
+   "operator": "ZZ",
+   "gate": "D32",
+   "terminal": "N",
+   "aircraft_type": "B737",
+   "offset_min": 207,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1205",
+   "operator": "ZZ",
+   "gate": "D5",
+   "terminal": "S",
+   "aircraft_type": "E170",
+   "offset_min": 208,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1206",
+   "operator": "ZZ",
+   "gate": "C3",
+   "terminal": "N",
+   "aircraft_type": "A321",
+   "offset_min": 209,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1207",
+   "operator": "ZZ",
+   "gate": "B24",
+   "terminal": "S",
+   "aircraft_type": "B712",
+   "offset_min": 210,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1208",
+   "operator": "ZZ",
+   "gate": "C44",
+   "terminal": "N",
+   "aircraft_type": "A21N",
+   "offset_min": 213,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1209",
+   "operator": "ZZ",
+   "gate": "D3",
+   "terminal": "S",
+   "aircraft_type": "B739",
+   "offset_min": 215,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1210",
+   "operator": "ZZ",
+   "gate": "A2",
+   "terminal": "S",
+   "aircraft_type": "A320",
+   "offset_min": 215,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1211",
+   "operator": "ZZ",
+   "gate": "B39",
+   "terminal": "S",
+   "aircraft_type": "A21N",
+   "offset_min": 217,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1212",
+   "operator": "ZZ",
+   "gate": "B37",
+   "terminal": "S",
+   "aircraft_type": "B737",
+   "offset_min": 218,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1213",
+   "operator": "ZZ",
+   "gate": "C11",
+   "terminal": "N",
+   "aircraft_type": "A320",
+   "offset_min": 218,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1214",
+   "operator": "ZZ",
+   "gate": "B32",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 220,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1215",
+   "operator": "ZZ",
+   "gate": "D36",
+   "terminal": "S",
+   "aircraft_type": "E170",
+   "offset_min": 221,
+   "delay_s": 1800,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1216",
+   "operator": "ZZ",
+   "gate": "A32",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 221,
+   "delay_s": 300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1217",
+   "operator": "ZZ",
+   "gate": "A17",
+   "terminal": "S",
+   "aircraft_type": "B738",
+   "offset_min": 226,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1218",
+   "operator": "ZZ",
+   "gate": "F6",
+   "terminal": "N",
+   "aircraft_type": "B739",
+   "offset_min": 227,
+   "delay_s": 600,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1219",
+   "operator": "ZZ",
+   "gate": "C44",
+   "terminal": "N",
+   "aircraft_type": "B38M",
+   "offset_min": 233,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1220",
+   "operator": "ZZ",
+   "gate": "B28",
+   "terminal": "N",
+   "aircraft_type": "B789",
+   "offset_min": 235,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1221",
+   "operator": "ZZ",
+   "gate": "A3",
+   "terminal": "N",
+   "aircraft_type": "CRJ9",
+   "offset_min": 236,
+   "delay_s": -300,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1222",
+   "operator": "ZZ",
+   "gate": "B16",
+   "terminal": "S",
+   "aircraft_type": "B789",
+   "offset_min": 237,
+   "delay_s": 0,
+   "cancelled": false
+  },
+  {
+   "ident": "ZZ1223",
+   "operator": "ZZ",
+   "gate": "E20",
+   "terminal": "N",
+   "aircraft_type": "B738",
+   "offset_min": 239,
+   "delay_s": 0,
+   "cancelled": false
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+[Unit]
+Description=Airport Rest Finder (FastAPI)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=appuser
+WorkingDirectory=/opt/airport-rest-finder
+EnvironmentFile=/etc/airport-rest-finder/env
+ExecStart=/opt/airport-rest-finder/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --no-access-log
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

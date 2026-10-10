@@ -1,0 +1,7 @@
+# /etc/caddy/Caddyfile
+# Replace YOUR_DOMAIN with your real domain. Caddy gets and renews the HTTPS certificate itself.
+# No `log` block on purpose: Caddy writes no access log unless asked.
+YOUR_DOMAIN {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8000
+}

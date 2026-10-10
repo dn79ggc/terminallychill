@@ -1,0 +1,12 @@
+# OPTIONAL. Do not enable until you know what one AeroAPI page costs and have a page cap you can afford.
+# Every run spends up to AEROAPI_MAX_PAGES result sets.
+[Unit]
+Description=Run the Airport Rest Finder ingest every 30 minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=30min
+Persistent=false
+
+[Install]
+WantedBy=timers.target

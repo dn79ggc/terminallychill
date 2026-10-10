@@ -1,0 +1,14 @@
+[Unit]
+Description=Airport Rest Finder: one flight-data ingest run
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=appuser
+WorkingDirectory=/opt/airport-rest-finder
+# systemd reads this file as root before dropping to appuser, so appuser never needs read access to it
+EnvironmentFile=/etc/airport-rest-finder/env
+ExecStart=/opt/airport-rest-finder/.venv/bin/python -m app.ingest --hours 3
+NoNewPrivileges=true
+PrivateTmp=true
