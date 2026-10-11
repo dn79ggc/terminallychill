@@ -81,9 +81,10 @@
     </div>
 
     <p class="spots-status" id="spots-status">Enter a gate and boarding time to see quiet places nearby.</p>
+    <p class="sr-only" id="results-status" role="status"></p>
     <ul id="warnings" class="warnings" hidden></ul>
 
-    <article class="pick" id="pick" aria-live="polite" hidden>
+    <article class="pick" id="pick" hidden>
       <p class="pick-label" id="pick-label">Closest quiet space</p>
       <h3 class="pick-name" id="pick-name"></h3>
       <dl class="pick-stats">
@@ -109,7 +110,7 @@
     </article>
 
     <h3 class="list-title" id="list-title" hidden>All quiet spots</h3>
-    <ol class="spots" id="spots" aria-live="polite"></ol>
+    <ol class="spots" id="spots"></ol>
     <p class="fine">Walk times and leave-by times are estimates.</p>
 
     <details class="about-forecasts" id="about-forecasts">
@@ -146,6 +147,7 @@
       <div id="map-host" class="map-host" hidden></div>
       <p id="map-caption">Loading Concourse B…</p>
     </div>
+    <p class="area-info" id="area-info" role="status" hidden></p>
 
     <ul class="legend" aria-label="Crowd colors">
       <li><span class="swatch quiet" aria-hidden="true"></span>Less crowded</li>

@@ -479,29 +479,61 @@ h2 {
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.14));
 }
 
-.atl-map .zone-shape {
-  cursor: pointer;
-  stroke: var(--bldg-edge);
-  stroke-width: 1;
-  transition: fill 160ms ease, stroke 120ms ease, stroke-width 120ms ease;
+.atl-map .heat {
+  pointer-events: none;
+  transition: fill 160ms ease;
 }
 
-.atl-map .zone-shape:hover { filter: brightness(1.04); }
+/* Zone shapes stay neutral; crowd color comes from the circular glows underneath. */
+.atl-map .zone-shape {
+  cursor: pointer;
+  fill: var(--zone-unknown);
+  fill-opacity: 0.3;
+  stroke: var(--bldg-edge);
+  stroke-width: 1;
+  transition: stroke 120ms ease, stroke-width 120ms ease;
+}
+
+/* Transparent (not "none") so the grouped gate zones stay clickable. */
+.atl-map .zone-gates .zone-shape { fill: transparent; }
+
+.atl-map .zone-shape:hover { fill-opacity: 0.15; }
+.atl-map .zone-gates .zone-shape:hover { fill: color-mix(in srgb, var(--ink) 4%, transparent); }
 .atl-map .zone-shape:focus { outline: none; }
 .atl-map .zone-shape:focus-visible { stroke: var(--route); stroke-width: 2; }
 
 .atl-map .zone-rest .zone-shape,
 .atl-map .zone-service .zone-shape {
-  stroke: color-mix(in srgb, var(--zone-ink) 30%, transparent);
+  stroke: color-mix(in srgb, var(--pill-ink) 35%, transparent);
+}
+
+.atl-map .zone-shape.is-recommended {
+  stroke: var(--route);
+  stroke-width: 1.75;
+  stroke-dasharray: 3 2.5;
+}
+
+.atl-map .zone-shape.is-inspected {
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-dasharray: none;
 }
 
 .atl-map .zone-shape.is-selected {
   stroke: var(--route);
   stroke-width: 3;
+  stroke-dasharray: none;
 }
 
-.atl-map .glyph { fill: var(--zone-ink); pointer-events: none; }
-.atl-map .zone-shape[data-crowd="na"] ~ .icon .glyph { fill: var(--pill-ink); }
+.area-info {
+  margin: 10px 0 0;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.area-info[hidden] { display: none; }
+
+.atl-map .glyph { fill: var(--pill-ink); pointer-events: none; }
 
 .atl-map .icon { pointer-events: none; }
 .atl-map .poi { stroke: #fff; stroke-width: 1.2; }
@@ -514,10 +546,8 @@ h2 {
   font-size: 10px;
   font-weight: 650;
   text-anchor: middle;
-  fill: var(--zone-ink);
+  fill: var(--pill-ink);
 }
-
-.atl-map .zone-shape[data-crowd="na"] ~ .caption { fill: var(--pill-ink); }
 
 .atl-map .cp-label {
   font-size: 10px;

@@ -18,6 +18,7 @@
     recommend: null,
     assumptions: null,
     selectedSpotId: null,
+    inspectedZoneId: null,
     horizonBucket: 0,
     loading: false,
     dataSource: null,
@@ -78,6 +79,8 @@
     spotsKicker: document.getElementById("spots-kicker"),
     resultsTitle: document.getElementById("results-title"),
     spotsStatus: document.getElementById("spots-status"),
+    resultsStatus: document.getElementById("results-status"),
+    areaInfo: document.getElementById("area-info"),
     warnings: document.getElementById("warnings"),
     spots: document.getElementById("spots"),
     assumptionsList: document.getElementById("assumptions-list")
@@ -152,27 +155,27 @@
     return "no estimate";
   }
 
-  function themeToken(name, fallback) {
-    var value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    return value || fallback;
-  }
-
-  function crowdFill(index) {
-    var c = crowdClass(index);
-    if (c === "quiet") return themeToken("--zone-quiet", "#6fbe95");
-    if (c === "moderate") return themeToken("--zone-moderate", "#e0b84a");
-    if (c === "busy") return themeToken("--zone-busy", "#d96b52");
-    return themeToken("--zone-unknown", "#c2ccd6");
-  }
-
   function cssEscape(value) {
     if (window.CSS && CSS.escape) return CSS.escape(value);
     return String(value).replace(/[^a-zA-Z0-9_-]/g, "\\$&");
   }
 
   function formatWalk(seconds) {
+    if (seconds == null || Number.isNaN(+seconds)) return "walk time unavailable";
     var m = Math.max(1, Math.round(seconds / 60));
     return m + (m === 1 ? " min walk" : " min walk");
+  }
+
+  // Missing or unparseable API times render as "—" instead of throwing in Intl.
+  function formatTime(iso) {
+    if (!iso) return "—";
+    var d = new Date(iso);
+    return Number.isNaN(d.getTime()) ? "—" : timeFmt.format(d);
+  }
+
+  function crowdSummary(index) {
+    if (index == null || Number.isNaN(+index)) return "no crowd estimate";
+    return crowdLabel(index) + " (crowd " + index + ")";
   }
 
   function apiErrorDetail(body, fallback) {
@@ -213,11 +216,11 @@
 
   function paintReadout() {
     var instant = readBoarding();
-    if (!instant) {
-      els.boardReadout.textContent = "Choose a boarding date and time.";
-      return;
-    }
-    els.boardReadout.textContent = dateFmt.format(instant) + " · " + timeFmt.format(instant) + " Atlanta";
+    var text = instant
+      ? dateFmt.format(instant) + " · " + timeFmt.format(instant) + " Atlanta"
+      : "Choose a boarding date and time.";
+    // This region is aria-live and repainted on a timer; only touch it when the text changes.
+    if (els.boardReadout.textContent !== text) els.boardReadout.textContent = text;
   }
 
   function syncChip() {
@@ -449,6 +452,31 @@
     seat: '<path class="glyph" d="M-6,0H6V4.5H-6ZM-4.5,-5H4.5V0H-4.5ZM-5,4.5H-3.5V6.5H-5ZM3.5,4.5H5V6.5H3.5Z"/>'
   };
 
+  var HEAT_GRADIENTS = ["quiet", "moderate", "busy"].map(function (c) {
+    return '<radialGradient id="heat-' + c + '">' +
+      '<stop offset="0" style="stop-color:var(--zone-' + c + ');stop-opacity:0.9"/>' +
+      '<stop offset="0.6" style="stop-color:var(--zone-' + c + ');stop-opacity:0.5"/>' +
+      '<stop offset="1" style="stop-color:var(--zone-' + c + ');stop-opacity:0"/>' +
+      "</radialGradient>";
+  }).join("");
+
+  // Grouped gate zones glow at each of their gates; other zones glow at their own center.
+  function heatSpots(zone, geom) {
+    if (zone.kind === "gates" && zone.gate_range) {
+      var spots = [];
+      for (var n = zone.gate_range[0]; n <= zone.gate_range[1]; n++) {
+        var g = gateGeom(n);
+        if (!g) continue;
+        if (g.side === "n") spots.push({ x: g.x, y: g.y + 23, r: 21 });
+        else if (g.side === "s") spots.push({ x: g.x, y: g.y - 23, r: 21 });
+        else spots.push({ x: g.x - 24, y: g.y, r: 21 });
+      }
+      return spots;
+    }
+    if (geom.cx == null) return [];
+    return [{ x: geom.cx, y: geom.cy, r: geom.caption ? 34 : 24 }];
+  }
+
   function buildConcourseSvg() {
     var out = [];
     out.push('<svg xmlns="http://www.w3.org/2000/svg" class="atl-map" viewBox="0 0 ' + MAP_BOX.w + " " + MAP_BOX.h + '">');
@@ -457,8 +485,13 @@
       '<text x="515" y="14">Plane Train · A, T, baggage claim</text>' +
       '<text x="515" y="293">Plane Train · C, D, E, F</text></g>');
 
-    out.push('<path class="bldg" d="M58,104H860V82Q860,64 878,64H932Q950,64 950,82V218Q950,236 932,236H878Q860,236 860,218V196H58Q40,196 40,178V122Q40,104 58,104Z"/>');
-    out.push('<path class="bldg" d="' + roundRect(466, 80, 82, 140, 14) + '"/>');
+    var bldgPaths = [
+      "M58,104H860V82Q860,64 878,64H932Q950,64 950,82V218Q950,236 932,236H878Q860,236 860,218V196H58Q40,196 40,178V122Q40,104 58,104Z",
+      roundRect(466, 80, 82, 140, 14)
+    ];
+    out.push("<defs>" + HEAT_GRADIENTS +
+      '<clipPath id="bldg-clip">' + bldgPaths.map(function (d) { return '<path d="' + d + '"/>'; }).join("") + "</clipPath></defs>");
+    bldgPaths.forEach(function (d) { out.push('<path class="bldg" d="' + d + '"/>'); });
 
     var gates = [];
     var spots = [];
@@ -467,6 +500,15 @@
       if (!geom) return;
       (zone.kind === "gates" ? gates : spots).push({ zone: zone, geom: geom });
     });
+
+    // Circular heat glows, clipped to the concourse; painted per zone by paintHeatmap().
+    var heat = '<g id="heat-layer" clip-path="url(#bldg-clip)" aria-hidden="true">';
+    gates.concat(spots).forEach(function (item) {
+      heatSpots(item.zone, item.geom).forEach(function (c) {
+        heat += '<circle class="heat" data-zone="' + escapeXml(item.zone.id) + '" cx="' + c.x + '" cy="' + c.y + '" r="' + c.r + '"/>';
+      });
+    });
+    out.push(heat + "</g>");
 
     gates.concat(spots).forEach(function (item) {
       var geom = item.geom;
@@ -513,7 +555,8 @@
 
     var svg = els.mapHost.querySelector("svg");
     if (svg) {
-      svg.setAttribute("role", "img");
+      // A group, not an image: the zones inside are focusable buttons.
+      svg.setAttribute("role", "group");
       svg.setAttribute("aria-label", "Map of ATL Concourse B, gates B1 to B39");
       state.baseBox = { x: MAP_BOX.x, y: MAP_BOX.y, w: MAP_BOX.w, h: MAP_BOX.h };
       state.box = { x: MAP_BOX.x, y: MAP_BOX.y, w: MAP_BOX.w, h: MAP_BOX.h };
@@ -674,12 +717,11 @@
       var shape = group.querySelector(".zone-shape") || group.querySelector("rect");
       if (!shape) return;
       var idx = forecastIndexForZone(zone.id);
-      var fill = crowdFill(idx);
-      // Solid fills from forecast indices (or neutral gray when missing).
-      // Selection outline is applied separately and must not replace these colors.
-      shape.style.setProperty("fill", fill);
-      shape.setAttribute("fill", fill);
-      svg.style.setProperty("--zone-" + zone.id, fill);
+      var level = crowdClass(idx);
+      // Crowd color lives only on the circular heat glows; zone shapes stay neutral and clickable.
+      Array.prototype.forEach.call(svg.querySelectorAll('.heat[data-zone="' + zone.id + '"]'), function (c) {
+        c.setAttribute("fill", level === "unknown" ? "none" : "url(#heat-" + level + ")");
+      });
       shape.setAttribute("data-crowd", idx == null ? "na" : String(idx));
       shape.setAttribute("tabindex", "0");
       shape.setAttribute("role", "button");
@@ -697,18 +739,61 @@
     });
   }
 
+  function zoneDef(zoneId) {
+    return (state.graph && state.graph.zones.find(function (z) { return z.id === zoneId; })) || null;
+  }
+
+  function recommendedSpotForZone(zoneId) {
+    if (!state.recommend || !state.recommend.spots) return null;
+    var zone = zoneDef(zoneId);
+    // A grouped gate zone is not itself a seating area, so never map it onto a spot via zone_id.
+    var byZone = zone && zone.kind !== "gates";
+    return state.recommend.spots.find(function (s) {
+      return s.id === zoneId || (byZone && s.zone_id === zoneId);
+    }) || null;
+  }
+
   function selectZone(zoneId) {
-    if (state.recommend && state.recommend.spots) {
-      var match = state.recommend.spots.find(function (s) {
-        return s.id === zoneId || s.zone_id === zoneId;
-      });
-      if (match) {
-        selectSpot(match.id, { focus: true });
-        return;
-      }
+    var match = recommendedSpotForZone(zoneId);
+    if (match) {
+      selectSpot(match.id, { focus: true });
+      return;
     }
-    state.selectedSpotId = zoneId;
-    paintSelection();
+    // Not a ranked recommendation: describe the area, keep the current pick as is.
+    paintAreaInfo(zoneId);
+  }
+
+  function announceResults(text) {
+    els.resultsStatus.textContent = text;
+  }
+
+  // opts.quiet: refresh the text without a screen-reader announcement (slider scrubbing).
+  function paintAreaInfo(zoneId, opts) {
+    state.inspectedZoneId = zoneId || null;
+    els.areaInfo.setAttribute("aria-live", opts && opts.quiet ? "off" : "polite");
+    Array.prototype.forEach.call(els.mapHost.querySelectorAll(".zone-shape.is-inspected"), function (el) {
+      el.classList.remove("is-inspected");
+    });
+    if (!zoneId) {
+      els.areaInfo.hidden = true;
+      els.areaInfo.textContent = "";
+      return;
+    }
+    var group = els.mapHost.querySelector("#" + cssEscape(zoneId));
+    var shape = group && group.querySelector(".zone-shape");
+    if (shape) shape.classList.add("is-inspected");
+
+    var idx = forecastIndexForZone(zoneId);
+    var instant = forecastSelectedInstant();
+    var parts = [placeName(zoneId)];
+    parts.push(idx == null
+      ? "No crowd estimate" + (state.forecast ? " for this area" : " yet")
+      : crowdLabelTitle(idx) + " (crowd " + idx + ")" + (instant ? " at " + timeFmt.format(instant) : ""));
+    if (state.recommend && state.recommend.spots && state.recommend.spots.length) {
+      parts.push("Not one of your recommended spots");
+    }
+    els.areaInfo.textContent = parts.join(" · ") + ".";
+    els.areaInfo.hidden = false;
   }
 
   function paintSelection() {
@@ -723,6 +808,13 @@
 
     Array.prototype.forEach.call(els.mapHost.querySelectorAll(".gate"), function (el) {
       el.classList.toggle("is-mine", el.getAttribute("data-gate") === state.gate);
+    });
+
+    var recommendedIds = {};
+    ((state.recommend && state.recommend.spots) || []).forEach(function (s) { recommendedIds[s.id] = true; });
+    Array.prototype.forEach.call(els.mapHost.querySelectorAll(".zone"), function (group) {
+      var shape = group.querySelector(".zone-shape");
+      if (shape) shape.classList.toggle("is-recommended", !!recommendedIds[group.id]);
     });
 
     var spot = selectedSpot();
@@ -769,7 +861,7 @@
       : nearest && nearest.id === spot.id ? "Closest quiet space" : "Quiet space";
     els.pickName.textContent = placeName(spot.id, spot.label);
     els.pickWalk.textContent = spot.walk_s_from_gate == null ? "—" : formatWalk(spot.walk_s_from_gate).replace(" walk", "");
-    els.pickLeave.textContent = spot.leave_by ? timeFmt.format(new Date(spot.leave_by)) : "—";
+    els.pickLeave.textContent = formatTime(spot.leave_by);
     els.pickCountdown.setAttribute("data-leave-by", spot.leave_by || "");
     els.pickCountdown.textContent = leaveCountdown(spot.leave_by);
     els.pickCrowd.textContent =
@@ -796,7 +888,13 @@
   function selectSpot(spotId, opts) {
     opts = opts || {};
     state.selectedSpotId = spotId;
+    paintAreaInfo(null);
     paintSelection();
+    var spot = selectedSpot();
+    if (spot && opts.announce !== false) {
+      announceResults(placeName(spot.id, spot.label) + " selected. " + formatWalk(spot.walk_s_from_gate) +
+        ", leave by " + formatTime(spot.leave_by) + ".");
+    }
     if (opts.zoom !== false) zoomToZone(spotId);
     if (opts.focus) {
       var row = els.spots.querySelector('[data-spot-id="' + spotId + '"]');
@@ -821,6 +919,7 @@
   function leaveCountdown(iso) {
     if (!iso) return "—";
     var leave = new Date(iso);
+    if (Number.isNaN(leave.getTime())) return "—";
     var mins = Math.round((leave.getTime() - Date.now()) / 60000);
     if (mins < -1) return "passed";
     if (mins <= 1) return "now";
@@ -863,7 +962,8 @@
       li.setAttribute("role", "button");
       li.setAttribute(
         "aria-label",
-        placeName(spot.id, spot.label) + ", " + formatWalk(spot.walk_s_from_gate) + ", leave by " + timeFmt.format(new Date(spot.leave_by))
+        placeName(spot.id, spot.label) + ", " + formatWalk(spot.walk_s_from_gate) + ", " +
+          crowdSummary(spot.crowd_index_now) + ", leave by " + formatTime(spot.leave_by)
       );
 
       var rank = document.createElement("span");
@@ -877,20 +977,17 @@
       name.textContent = placeName(spot.id, spot.label);
       var meta = document.createElement("p");
       meta.className = "spot-meta";
-      meta.textContent =
-        formatWalk(spot.walk_s_from_gate) +
-        " · " + crowdLabel(spot.crowd_index_now) +
-        " (crowd " + spot.crowd_index_now + ")";
+      meta.textContent = formatWalk(spot.walk_s_from_gate) + " · " + crowdSummary(spot.crowd_index_now);
       body.append(name, meta);
 
       var leave = document.createElement("p");
       leave.className = "leave";
       leave.innerHTML = "<span>Leave by</span>";
       var strong = document.createElement("strong");
-      strong.textContent = timeFmt.format(new Date(spot.leave_by));
+      strong.textContent = formatTime(spot.leave_by);
       var cd = document.createElement("span");
       cd.className = "countdown";
-      cd.setAttribute("data-leave-by", spot.leave_by);
+      cd.setAttribute("data-leave-by", spot.leave_by || "");
       cd.textContent = leaveCountdown(spot.leave_by);
       leave.append(strong, cd);
 
@@ -908,7 +1005,7 @@
     // Default selection is the closest quiet space; the map zooms to it.
     if (!state.selectedSpotId) {
       var first = closestSpot(rec.spots);
-      if (first) selectSpot(first.id);
+      if (first) selectSpot(first.id, { announce: false });
     } else {
       paintSelection();
     }
@@ -966,7 +1063,10 @@
 
   function paintSource() {
     var info = classifySource(state.dataSource, state.usingMock);
-    els.mockBanner.hidden = !(state.usingMock || MOCK);
+    els.mockBanner.hidden = info.kind !== "sample";
+    els.mockBanner.textContent = state.usingMock || MOCK
+      ? "Demo mode. These values are for testing — not live airport data."
+      : "Sample data. These flights are synthetic or recorded — not live airport data.";
 
     els.sourceBadge.hidden = info.kind === "unknown";
     els.sourceBadge.className = "source-badge" + (info.kind === "sample" ? " is-sample" : info.kind === "live" ? " is-live" : "");
@@ -1089,7 +1189,14 @@
     var boarding = new Date(boardingIso);
     var gateZone = zoneIdForGate(gate);
     var paths = shortestPaths(gateZone);
-    var ranked = rest.map(function (zone) {
+    var bufferMs = 10 * 60 * 1000;
+    var nowMs = Date.now();
+    var ranked = rest.filter(function (zone) {
+      // Only candidates with a known walk whose leave-by is still ahead of now.
+      var path = paths[zone.id];
+      if (!path || path.walk_s == null) return false;
+      return boarding.getTime() - path.walk_s * 1000 - bufferMs > nowMs;
+    }).map(function (zone) {
       var nowIdx = forecastIndexForZone(zone.id);
       var peak = nowIdx;
       if (state.forecast && state.forecast.zones) {
@@ -1122,10 +1229,9 @@
     // Sample recommendations skip spots forecast to be busy right now (unless all are).
     var notBusy = ranked.filter(function (s) { return crowdClass(s.crowd_index_now) !== "busy"; });
     ranked = (notBusy.length ? notBusy : ranked.slice(0, 1)).slice(0, 3).map(function (spot) {
-      var walk = spot.walk_s_from_gate == null ? 120 : spot.walk_s_from_gate;
-      var leave = new Date(boarding.getTime() - (walk + 10 * 60) * 1000);
+      var leave = new Date(boarding.getTime() - spot.walk_s_from_gate * 1000 - bufferMs);
       spot.leave_by = leave.toISOString();
-      spot.stay_minutes = Math.max(0, Math.round((leave.getTime() - Date.now()) / 60000));
+      spot.stay_minutes = Math.max(0, Math.round((leave.getTime() - nowMs) / 60000));
       return spot;
     });
 
@@ -1166,6 +1272,9 @@
     state.horizonBucket = 0;
     state.loading = true;
     state.usingMock = false;
+    state.dataSource = null;
+    paintAreaInfo(null);
+    announceResults("");
     els.go.disabled = true;
     els.go.textContent = "Finding…";
     setError(els.formError, "");
@@ -1249,6 +1358,13 @@
       paintSpots();
       paintSource();
       els.formStatus.textContent = "Results ready for gate " + gate + ".";
+      var pick = selectedSpot();
+      announceResults(
+        "Results ready for gate " + gate + ". " +
+        (pick
+          ? placeName(pick.id, pick.label) + ", " + formatWalk(pick.walk_s_from_gate) + ", leave by " + formatTime(pick.leave_by) + "."
+          : els.spotsStatus.textContent)
+      );
       els.resultsTitle.setAttribute("tabindex", "-1");
       els.resultsTitle.focus({ preventScroll: true });
       if (window.matchMedia("(max-width: 899px)").matches) {
@@ -1258,6 +1374,8 @@
     } catch (err) {
       state.forecast = null;
       state.recommend = null;
+      state.dataSource = null;
+      state.usingMock = false;
       setView("input");
       syncHorizonControl();
       paintSpots();
@@ -1328,6 +1446,7 @@
       els.forecastFor.textContent
     );
     paintHeatmap();
+    if (state.inspectedZoneId) paintAreaInfo(state.inspectedZoneId, { quiet: true });
   }
   els.horizon.addEventListener("input", onHorizonInput);
   els.horizon.addEventListener("change", onHorizonInput);
