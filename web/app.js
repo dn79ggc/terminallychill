@@ -1343,7 +1343,10 @@
         } else {
           state.forecast = null;
           if (forecastErr && forecastErr.status !== 422) {
-            setError(els.formError, "Quiet spots loaded, but the crowd map is unavailable right now.");
+            // #form-error is hidden in the results view, so surface this in the results warnings list.
+            state.recommend.warnings = (recommendResult.warnings || []).concat(
+              "Quiet spots loaded, but the crowd map is unavailable right now."
+            );
           }
         }
       }
