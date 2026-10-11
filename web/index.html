@@ -107,6 +107,7 @@
         <a id="link-google" href="#" target="_blank" rel="noopener noreferrer">Google Maps</a>
         <a id="link-apple" href="#" target="_blank" rel="noopener noreferrer">Apple Maps</a>
       </div>
+      <p class="map-note" id="map-note">These open the airport. Indoor directions there are unreliable, so follow the path on this map.</p>
     </article>
 
     <h3 class="list-title" id="list-title" hidden>All quiet spots</h3>
@@ -145,9 +146,21 @@
 
     <div class="map-frame" id="map-frame">
       <div id="map-host" class="map-host" hidden></div>
+      <div class="map-tools" id="map-tools" hidden>
+        <button type="button" class="map-tool" id="zoom-in" aria-label="Zoom in" aria-controls="map-host">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z" fill="currentColor"/></svg>
+        </button>
+        <button type="button" class="map-tool" id="zoom-out" aria-label="Zoom out" aria-controls="map-host">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 11h14v2H5z" fill="currentColor"/></svg>
+        </button>
+      </div>
       <p id="map-caption">Loading Concourse B…</p>
     </div>
     <p class="area-info" id="area-info" role="status" hidden></p>
+    <div class="route-help" id="route-help" hidden>
+      <h3 id="route-help-title">Walk on this map</h3>
+      <ol class="route-steps" id="route-steps"></ol>
+    </div>
 
     <ul class="legend" aria-label="Crowd colors">
       <li><span class="swatch quiet" aria-hidden="true"></span>Less crowded</li>
