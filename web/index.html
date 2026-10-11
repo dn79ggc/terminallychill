@@ -2,58 +2,178 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ATL Rest Finder</title>
-<style>
-  :root { --bg:#ffffff; --fg:#1a1a1a; --muted:#666; --bar:#2563eb; --line:#e5e5e5; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#111418; --fg:#ececec; --muted:#9aa0a6; --bar:#60a5fa; --line:#2a2f36; }
-  }
-  body { margin:0; padding:16px; background:var(--bg); color:var(--fg); font:16px/1.4 system-ui, sans-serif; }
-  main { max-width:560px; margin:0 auto; }
-  h1 { font-size:1.3rem; margin:0 0 4px; }
-  p.sub { color:var(--muted); margin:0 0 16px; font-size:.9rem; }
-  .row { display:grid; grid-template-columns:2.2rem 1fr 3rem; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid var(--line); }
-  .bar { height:14px; background:var(--bar); border-radius:3px; min-width:2px; }
-  .num { text-align:right; font-variant-numeric:tabular-nums; }
-  #status { color:var(--muted); font-size:.85rem; margin-top:12px; }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3efe6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10141a" media="(prefers-color-scheme: dark)">
+<title>Terminally Chill — ATL quiet spots</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main>
-  <h1>ATL departures, next 2 hours</h1>
-  <p class="sub">Scheduled departures per concourse (Tier A proof page: the real UI replaces this).</p>
-  <div id="rows"></div>
-  <p id="status">Loading...</p>
-</main>
-<script>
-const rowsEl = document.getElementById("rows");
-const statusEl = document.getElementById("status");
+<a class="skip" href="#trip">Skip to gate and boarding time</a>
 
-async function load() {
-  try {
-    const res = await fetch("/api/summary?hours=2");
-    if (!res.ok) throw new Error("API returned " + res.status);
-    const data = await res.json();
-    const max = Math.max(1, ...data.by_concourse.map(r => r.departures));
-    rowsEl.replaceChildren();
-    for (const r of data.by_concourse) {
-      if (r.concourse === "?" && r.departures === 0) continue;
-      const row = document.createElement("div"); row.className = "row";
-      const name = document.createElement("strong"); name.textContent = r.concourse;
-      const bar = document.createElement("div"); bar.className = "bar"; bar.style.width = (100 * r.departures / max) + "%";
-      const num = document.createElement("span"); num.className = "num"; num.textContent = r.departures;
-      row.append(name, bar, num); rowsEl.append(row);
-    }
-    const fetched = data.last_fetched_at
-      ? new Date(data.last_fetched_at).toLocaleString("en-US", { timeZone: data.tz, hour: "numeric", minute: "2-digit", month: "short", day: "numeric" })
-      : "never";
-    statusEl.textContent = data.total + " departures | source: " + (data.sources.join(", ") || "none") + " | data fetched: " + fetched + " (" + data.tz + ")";
-  } catch (e) {
-    statusEl.textContent = "Could not load data: " + e.message;
-  }
-}
-load();
-</script>
+<div id="mock-banner" class="banner mock-banner" hidden role="status">
+  Demo mode. These values are for testing — not live airport data.
+</div>
+
+<header class="topbar">
+  <div class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
+        <rect width="36" height="36" rx="10" fill="currentColor"/>
+        <path d="M9 24.5h18M12 24.5v-5.5a6 6 0 0 1 12 0v5.5" fill="none" stroke="var(--on-pine)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <p class="eyebrow">Terminally Chill · ATL</p>
+        <h1>Quiet spots</h1>
+      </div>
+    </div>
+    <p class="clock">
+      <time id="atl-now" datetime="">—</time>
+      <span id="atl-day">Atlanta time</span>
+    </p>
+  </div>
+</header>
+
+<main id="app" data-view="input">
+  <form id="trip" class="card trip" novalidate>
+    <p class="lede">A place to rest close enough to your gate that you will not miss your flight.</p>
+
+    <div class="field">
+      <label for="gate">Gate</label>
+      <div class="gate-wrap">
+        <input id="gate" name="gate" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="4" placeholder="B22" required aria-describedby="gate-hint gate-error">
+        <span class="concourse-chip" id="concourse-chip" hidden><span class="sr-only">Concourse </span><span id="concourse-letter"></span></span>
+      </div>
+      <p class="hint" id="gate-hint">Concourse B for this demo — for example B12 or B22.</p>
+      <p class="error" id="gate-error" role="alert" hidden></p>
+    </div>
+
+    <fieldset class="field">
+      <legend>Boarding time</legend>
+      <p class="hint" id="board-hint">Enter your boarding date and time (Atlanta local time).</p>
+      <div class="when">
+        <div>
+          <label for="board-date">Date</label>
+          <input id="board-date" name="board-date" type="date" required aria-describedby="board-hint board-readout board-error">
+        </div>
+        <div>
+          <label for="board-time">Time</label>
+          <input id="board-time" name="board-time" type="time" required aria-describedby="board-hint board-readout board-error">
+        </div>
+      </div>
+      <p class="readout" id="board-readout" aria-live="polite"></p>
+      <p class="error" id="board-error" role="alert" hidden></p>
+    </fieldset>
+
+    <button type="submit" class="go" id="go-btn">Find quiet spots</button>
+    <p class="scope-note" id="scope-note" role="status" hidden></p>
+    <p class="error" id="form-error" role="alert" hidden></p>
+    <p class="sr-only" id="form-status" role="status"></p>
+  </form>
+
+  <section class="card results" id="results" aria-labelledby="results-title" hidden>
+    <div class="results-head">
+      <div>
+        <p class="kicker-left" id="spots-kicker">Your trip</p>
+        <h2 id="results-title">Quiet spots</h2>
+      </div>
+      <button type="button" class="edit-btn" id="edit-btn">Edit</button>
+    </div>
+
+    <p class="spots-status" id="spots-status">Enter a gate and boarding time to see quiet places nearby.</p>
+    <p class="sr-only" id="results-status" role="status"></p>
+    <ul id="warnings" class="warnings" hidden></ul>
+
+    <article class="pick" id="pick" hidden>
+      <p class="pick-label" id="pick-label">Closest quiet space</p>
+      <h3 class="pick-name" id="pick-name"></h3>
+      <dl class="pick-stats">
+        <div>
+          <dt>Walk from gate</dt>
+          <dd id="pick-walk">—</dd>
+        </div>
+        <div>
+          <dt>Leave by</dt>
+          <dd id="pick-leave">—</dd>
+          <dd class="pick-countdown" id="pick-countdown">—</dd>
+        </div>
+        <div>
+          <dt>Crowd now</dt>
+          <dd id="pick-crowd">—</dd>
+        </div>
+      </dl>
+      <p class="pick-note" id="pick-note"></p>
+      <div class="map-links" id="map-links">
+        <a id="link-google" href="#" target="_blank" rel="noopener noreferrer">Google Maps</a>
+        <a id="link-apple" href="#" target="_blank" rel="noopener noreferrer">Apple Maps</a>
+      </div>
+    </article>
+
+    <h3 class="list-title" id="list-title" hidden>All quiet spots</h3>
+    <ol class="spots" id="spots"></ol>
+    <p class="fine">Walk times and leave-by times are estimates.</p>
+
+    <details class="about-forecasts" id="about-forecasts">
+      <summary>About these forecasts</summary>
+      <div class="about-body">
+        <p id="about-source">Source details appear after you search.</p>
+        <ul class="about-limits" id="about-limits">
+          <li>This demo focuses on ATL Concourse B (gates B1–B39).</li>
+          <li>Colors show estimated crowd levels from flight schedules, not measured noise or live sensors.</li>
+          <li>Recommendations favor less crowded seating areas with enough time to walk back.</li>
+          <li>Walking times and leave-by times are estimates. Check airport monitors for gate changes.</li>
+          <li>SAMPLE DATA means demo or recorded flights, not a live AeroAPI feed.</li>
+        </ul>
+        <p class="about-heading">Assumptions <span id="about-assumptions-version" class="about-version"></span></p>
+        <ul id="assumptions-list" class="assumptions"></ul>
+        <p class="hint" id="assumptions-empty">Assumption details appear when the forecast service is available.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="card stage" id="stage" aria-labelledby="map-title">
+    <div class="section-head">
+      <h2 id="map-title">Concourse B</h2>
+      <div class="head-meta">
+        <button type="button" class="map-reset" id="map-reset" hidden>Full concourse</button>
+        <p class="source-badge" id="source-badge" hidden>
+          <span class="source-value" id="source-badge-value">Not loaded</span>
+        </p>
+        <p class="kicker" id="map-kicker">ATL</p>
+      </div>
+    </div>
+
+    <div class="map-frame" id="map-frame">
+      <div id="map-host" class="map-host" hidden></div>
+      <p id="map-caption">Loading Concourse B…</p>
+    </div>
+    <p class="area-info" id="area-info" role="status" hidden></p>
+
+    <ul class="legend" aria-label="Crowd colors">
+      <li><span class="swatch quiet" aria-hidden="true"></span>Less crowded</li>
+      <li><span class="swatch moderate" aria-hidden="true"></span>Moderate</li>
+      <li><span class="swatch busy" aria-hidden="true"></span>Busy</li>
+      <li><span class="swatch unknown" aria-hidden="true"></span>No estimate</li>
+    </ul>
+
+    <div class="forecast-control">
+      <div class="forecast-head">
+        <label for="horizon">Crowd forecast</label>
+        <p class="forecast-for" id="forecast-for" aria-live="polite">Forecast for —</p>
+      </div>
+      <div class="time-slot">
+        <span>Now</span>
+        <input id="horizon" type="range" min="0" max="0" value="0" step="1" disabled aria-describedby="forecast-for">
+        <span>Later</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Crowd levels are estimates from flight schedules. No account.</p>
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>
