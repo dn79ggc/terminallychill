@@ -1,0 +1,51 @@
+{
+  "concourse": "B",
+  "version": 1,
+  "svg": "web/concourse.svg",
+  "notes": "Original schematic of concourse B. Coordinates are the SVG viewBox. walk_s values are hand estimates, not measured walking times.",
+  "zones": [
+    {"id": "B-gates-1-10", "label": "Gates B1-B10", "kind": "gates", "gate_range": [1, 10], "capacity": 160},
+    {"id": "B-gates-11-20", "label": "Gates B11-B20", "kind": "gates", "gate_range": [11, 20], "capacity": 150},
+    {"id": "B-gates-21-30", "label": "Gates B21-B30", "kind": "gates", "gate_range": [21, 30], "capacity": 150},
+    {"id": "B-gates-31-39", "label": "Gates B31-B39", "kind": "gates", "gate_range": [31, 39], "capacity": 140},
+    {"id": "B-food-1", "label": "Food court", "kind": "amenity", "capacity": 120, "attractiveness": 1.4},
+    {"id": "B-shops-1", "label": "Shops", "kind": "amenity", "capacity": 80, "attractiveness": 0.8},
+    {"id": "B-rest-west", "label": "Quiet seating near B5", "kind": "rest", "capacity": 40, "seats": 24, "near_zone": "B-gates-1-10"},
+    {"id": "B-rest-mid", "label": "Quiet seating near B15", "kind": "rest", "capacity": 36, "seats": 18, "near_zone": "B-gates-11-20"},
+    {"id": "B-rest-east-2", "label": "Quiet seating near B30", "kind": "rest", "capacity": 40, "seats": 24, "near_zone": "B-gates-21-30"},
+    {"id": "B-service", "label": "Customer service", "kind": "service", "capacity": 60}
+  ],
+  "nodes": [
+    {"id": "B-junction-west", "zone": null, "x": 20, "y": 110},
+    {"id": "B-gates-1-10", "zone": "B-gates-1-10", "x": 68, "y": 110},
+    {"id": "B-rest-west", "zone": "B-rest-west", "x": 68, "y": 36},
+    {"id": "B-junction-1", "zone": null, "x": 116, "y": 110},
+    {"id": "B-food-1", "zone": "B-food-1", "x": 116, "y": 176},
+    {"id": "B-gates-11-20", "zone": "B-gates-11-20", "x": 172, "y": 110},
+    {"id": "B-rest-mid", "zone": "B-rest-mid", "x": 172, "y": 36},
+    {"id": "B-junction-2", "zone": null, "x": 228, "y": 110},
+    {"id": "B-shops-1", "zone": "B-shops-1", "x": 228, "y": 176},
+    {"id": "B-gates-21-30", "zone": "B-gates-21-30", "x": 284, "y": 110},
+    {"id": "B-rest-east-2", "zone": "B-rest-east-2", "x": 284, "y": 36},
+    {"id": "B-junction-3", "zone": null, "x": 332, "y": 110},
+    {"id": "B-service", "zone": "B-service", "x": 332, "y": 176},
+    {"id": "B-gates-31-39", "zone": "B-gates-31-39", "x": 372, "y": 110},
+    {"id": "B-junction-east", "zone": null, "x": 372, "y": 64}
+  ],
+  "edges": [
+    {"a": "B-junction-west", "b": "B-gates-1-10", "walk_s": 40},
+    {"a": "B-gates-1-10", "b": "B-rest-west", "walk_s": 45},
+    {"a": "B-gates-1-10", "b": "B-junction-1", "walk_s": 70},
+    {"a": "B-junction-1", "b": "B-food-1", "walk_s": 50},
+    {"a": "B-junction-1", "b": "B-gates-11-20", "walk_s": 80},
+    {"a": "B-gates-11-20", "b": "B-rest-mid", "walk_s": 45},
+    {"a": "B-gates-11-20", "b": "B-junction-2", "walk_s": 70},
+    {"a": "B-junction-2", "b": "B-shops-1", "walk_s": 50},
+    {"a": "B-junction-2", "b": "B-gates-21-30", "walk_s": 80},
+    {"a": "B-gates-21-30", "b": "B-rest-east-2", "walk_s": 40},
+    {"a": "B-gates-21-30", "b": "B-junction-3", "walk_s": 70},
+    {"a": "B-junction-3", "b": "B-service", "walk_s": 45},
+    {"a": "B-junction-3", "b": "B-gates-31-39", "walk_s": 80},
+    {"a": "B-gates-31-39", "b": "B-junction-east", "walk_s": 30}
+  ]
+}

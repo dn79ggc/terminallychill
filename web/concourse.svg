@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 210" role="img" aria-labelledby="concourse-title">
+  <title id="concourse-title">Schematic of ATL concourse B</title>
+  <style>
+    .corridor { fill: none; stroke: var(--corridor, #8ea0b3); stroke-width: 10; stroke-linecap: round; }
+    .zone-shape { stroke: var(--zone-stroke, #4a5968); stroke-width: 1.5; }
+    .junction { fill: var(--fill-junction, #5c6b7a); }
+    text { font-family: system-ui, sans-serif; font-size: 11px; fill: var(--label, #1c2430); }
+    .small { font-size: 9px; fill: var(--label-muted, #3d4b5c); }
+  </style>
+  <line class="corridor" x1="20" y1="110" x2="372" y2="110"/>
+  <g id="B-gates-1-10">
+    <title>Gates B1-B10</title>
+    <rect class="zone-shape gates" x="36" y="92" width="64" height="36" rx="4" fill="var(--zone-B-gates-1-10, var(--fill-gates, #d5e4f2))"/>
+    <text x="68" y="114" text-anchor="middle">B1-B10</text>
+  </g>
+  <g id="B-rest-west">
+    <title>Quiet seating near B5</title>
+    <rect class="zone-shape rest" x="40" y="16" width="56" height="32" rx="4" fill="var(--zone-B-rest-west, var(--fill-rest, #d7efe2))"/>
+    <text x="68" y="36" text-anchor="middle">Rest</text>
+  </g>
+  <g id="B-food-1">
+    <title>Food court</title>
+    <rect class="zone-shape amenity" x="86" y="156" width="60" height="32" rx="4" fill="var(--zone-B-food-1, var(--fill-amenity, #f3e3c4))"/>
+    <text x="116" y="176" text-anchor="middle">Food</text>
+  </g>
+  <g id="B-gates-11-20">
+    <title>Gates B11-B20</title>
+    <rect class="zone-shape gates" x="140" y="92" width="64" height="36" rx="4" fill="var(--zone-B-gates-11-20, var(--fill-gates, #d5e4f2))"/>
+    <text x="172" y="114" text-anchor="middle">B11-B20</text>
+  </g>
+  <g id="B-rest-mid">
+    <title>Quiet seating near B15</title>
+    <rect class="zone-shape rest" x="144" y="16" width="56" height="32" rx="4" fill="var(--zone-B-rest-mid, var(--fill-rest, #d7efe2))"/>
+    <text x="172" y="36" text-anchor="middle">Rest</text>
+  </g>
+  <g id="B-shops-1">
+    <title>Shops</title>
+    <rect class="zone-shape shops amenity" x="198" y="156" width="60" height="32" rx="4" fill="var(--zone-B-shops-1, var(--fill-amenity, #f3e3c4))"/>
+    <text x="228" y="176" text-anchor="middle">Shops</text>
+  </g>
+  <g id="B-gates-21-30">
+    <title>Gates B21-B30</title>
+    <rect class="zone-shape gates" x="252" y="92" width="64" height="36" rx="4" fill="var(--zone-B-gates-21-30, var(--fill-gates, #d5e4f2))"/>
+    <text x="284" y="114" text-anchor="middle">B21-B30</text>
+  </g>
+  <g id="B-rest-east-2">
+    <title>Quiet seating near B30</title>
+    <rect class="zone-shape rest" x="256" y="16" width="56" height="32" rx="4" fill="var(--zone-B-rest-east-2, var(--fill-rest, #d7efe2))"/>
+    <text x="284" y="36" text-anchor="middle">Rest</text>
+  </g>
+  <g id="B-service">
+    <title>Customer service</title>
+    <rect class="zone-shape service" x="302" y="156" width="60" height="32" rx="4" fill="var(--zone-B-service, var(--fill-service, #e6dced))"/>
+    <text x="332" y="176" text-anchor="middle">Service</text>
+  </g>
+  <g id="B-gates-31-39">
+    <title>Gates B31-B39</title>
+    <rect class="zone-shape gates" x="340" y="92" width="56" height="36" rx="4" fill="var(--zone-B-gates-31-39, var(--fill-gates, #d5e4f2))"/>
+    <text x="368" y="114" text-anchor="middle">B31-39</text>
+  </g>
+  <circle class="junction" cx="20" cy="110" r="4"><title>West end of the concourse</title></circle>
+  <circle class="junction" cx="116" cy="110" r="4"><title>Junction near the food court</title></circle>
+  <circle class="junction" cx="228" cy="110" r="4"><title>Junction near the shops</title></circle>
+  <circle class="junction" cx="332" cy="110" r="4"><title>Junction near customer service</title></circle>
+  <circle class="junction" cx="372" cy="64" r="4"><title>East end of the concourse</title></circle>
+  <text class="small" x="200" y="204" text-anchor="middle">Concourse B schematic. Walking times are estimates.</text>
+</svg>
