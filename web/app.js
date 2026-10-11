@@ -27,10 +27,13 @@
     zoomed: false,
     baseBox: null,
     box: null,
-    zoomFrame: 0
+    zoomFrame: 0,
+    zoomTimer: 0,
+    zoomTarget: null,
+    frameAspect: 0
   };
 
-  var AIRPORT_QUERY = "Hartsfield-Jackson Atlanta International Airport Concourse B";
+  var AIRPORT_QUERY = "Hartsfield-Jackson Atlanta International Airport";
 
   var els = {
     app: document.getElementById("app"),
@@ -49,6 +52,8 @@
     pickNote: document.getElementById("pick-note"),
     linkGoogle: document.getElementById("link-google"),
     linkApple: document.getElementById("link-apple"),
+    routeHelp: document.getElementById("route-help"),
+    routeSteps: document.getElementById("route-steps"),
     mockBanner: document.getElementById("mock-banner"),
     sourceBadge: document.getElementById("source-badge"),
     sourceBadgeValue: document.getElementById("source-badge-value"),
@@ -73,6 +78,9 @@
     mapKicker: document.getElementById("map-kicker"),
     mapCaption: document.getElementById("map-caption"),
     mapHost: document.getElementById("map-host"),
+    mapTools: document.getElementById("map-tools"),
+    zoomIn: document.getElementById("zoom-in"),
+    zoomOut: document.getElementById("zoom-out"),
     stage: document.getElementById("stage"),
     horizon: document.getElementById("horizon"),
     forecastFor: document.getElementById("forecast-for"),
@@ -374,6 +382,7 @@
   // B33+ around the far end. Positions are approximate, not surveyed.
 
   var MAP_BOX = { x: 0, y: 0, w: 1010, h: 300 };
+  var MIN_VIEW_W = 170;
   var HALL_Y = 150;
   var EDGE_N = 104;
   var EDGE_S = 196;
@@ -479,7 +488,7 @@
 
   function buildConcourseSvg() {
     var out = [];
-    out.push('<svg xmlns="http://www.w3.org/2000/svg" class="atl-map" viewBox="0 0 ' + MAP_BOX.w + " " + MAP_BOX.h + '">');
+    out.push('<svg xmlns="http://www.w3.org/2000/svg" class="atl-map" width="100%" viewBox="0 0 ' + MAP_BOX.w + " " + MAP_BOX.h + '">');
 
     out.push('<g class="train" aria-hidden="true"><line x1="507" y1="0" x2="507" y2="300"/>' +
       '<text x="515" y="14">Plane Train · A, T, baggage claim</text>' +
@@ -521,7 +530,7 @@
     });
 
     out.push('<text class="cp-label" x="507" y="70">Centerpoint</text>');
-    out.push('<g id="route-layer"></g>');
+    out.push('<g id="route-layer" aria-hidden="true"></g>');
 
     for (var n = 1; n <= 39; n++) {
       var g = gateGeom(n);
@@ -561,7 +570,10 @@
       state.baseBox = { x: MAP_BOX.x, y: MAP_BOX.y, w: MAP_BOX.w, h: MAP_BOX.h };
       state.box = { x: MAP_BOX.x, y: MAP_BOX.y, w: MAP_BOX.w, h: MAP_BOX.h };
       state.zoomed = false;
+      state.frameAspect = state.box.w / state.box.h;
+      applyBox(state.box, { refit: true });
     }
+    els.mapTools.hidden = !svg;
     els.mapReset.hidden = true;
 
     paintHeatmap();
@@ -570,25 +582,56 @@
 
   // ---- Zoom (SVG viewBox) ----------------------------------------------------
 
-  function applyBox(box) {
+  function stopZoomMotion() {
+    if (state.zoomFrame) cancelAnimationFrame(state.zoomFrame);
+    state.zoomFrame = 0;
+    if (state.zoomTimer) clearTimeout(state.zoomTimer);
+    state.zoomTimer = 0;
+  }
+
+  function applyBox(box, opts) {
     var svg = els.mapHost.querySelector("svg");
     if (!svg) return;
     state.box = { x: box.x, y: box.y, w: box.w, h: box.h };
     svg.setAttribute("viewBox", box.x + " " + box.y + " " + box.w + " " + box.h);
+    // height:auto does not reliably follow a viewBox change, so a closer slice
+    // stayed as short as the full concourse. Size the drawing from the slice
+    // only when the frame itself should change. Pinch and button zoom keep
+    // the frame put so the page does not grow.
+    if (opts && opts.refit) {
+      var width = els.mapHost.clientWidth;
+      if (width > 0 && box.w > 0) {
+        state.frameAspect = box.w / box.h;
+        svg.style.height = (width / state.frameAspect) + "px";
+      }
+    }
+    syncZoomTools();
   }
 
-  function animateBox(target) {
-    if (state.zoomFrame) cancelAnimationFrame(state.zoomFrame);
+  function animateBox(target, opts) {
+    stopZoomMotion();
+    opts = opts || {};
+    state.zoomTarget = target;
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce || !state.box) {
-      applyBox(target);
+      applyBox(target, opts);
+      if (state.zoomTarget === target) state.zoomTarget = null;
       return;
     }
     var from = { x: state.box.x, y: state.box.y, w: state.box.w, h: state.box.h };
     var start = performance.now();
-    var duration = 520;
+    var duration = opts.duration || 520;
     function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function finish() {
+      if (state.zoomTimer) clearTimeout(state.zoomTimer);
+      state.zoomTimer = 0;
+      if (state.zoomFrame) cancelAnimationFrame(state.zoomFrame);
+      state.zoomFrame = 0;
+      applyBox(target, opts);
+      if (state.zoomTarget === target) state.zoomTarget = null;
+    }
     function step(now) {
+      if (state.zoomTarget !== target) return;
       var t = Math.min(1, (now - start) / duration);
       var k = ease(t);
       applyBox({
@@ -596,11 +639,12 @@
         y: from.y + (target.y - from.y) * k,
         w: from.w + (target.w - from.w) * k,
         h: from.h + (target.h - from.h) * k
-      });
+      }, opts);
       if (t < 1) state.zoomFrame = requestAnimationFrame(step);
-      else state.zoomFrame = 0;
+      else finish();
     }
     state.zoomFrame = requestAnimationFrame(step);
+    state.zoomTimer = setTimeout(finish, duration + 40);
   }
 
   function zoneBBox(zoneId) {
@@ -612,28 +656,10 @@
     return { x: b.x, y: b.y, w: b.width, h: b.height };
   }
 
-  function zoomBoxFor(zoneId) {
-    var base = state.baseBox;
-    var focus = zoneBBox(zoneId);
-    if (!base || !focus) return null;
-
-    var gate = travelerGate();
-    if (gate) {
-      var pill = { x: gate.pill.x - 20, y: gate.pill.y - 12, w: 40, h: 24 };
-      var x1 = Math.min(focus.x, pill.x);
-      var y1 = Math.min(focus.y, pill.y);
-      var x2 = Math.max(focus.x + focus.w, pill.x + pill.w);
-      var y2 = Math.max(focus.y + focus.h, pill.y + pill.h);
-      focus = { x: x1, y: y1, w: x2 - x1, h: y2 - y1 };
-    }
-
-    // Keep both rows of gate numbers in view: never shorter than the holdrooms plus pills.
-    var aspect = base.w / base.h;
-    var h = Math.max(190, focus.h + 40);
-    var w = Math.max(h * aspect, focus.w + 140);
-    h = w / aspect;
-    if (w >= base.w) return { x: base.x, y: base.y, w: base.w, h: base.h };
-
+  function fitBox(base, focus, w, h) {
+    w = Math.min(w, base.w);
+    h = Math.min(h, base.h);
+    if (w >= base.w && h >= base.h) return { x: base.x, y: base.y, w: base.w, h: base.h };
     var cx = focus.x + focus.w / 2;
     var cy = Math.max(focus.y + focus.h / 2, HALL_Y - 10);
     return {
@@ -644,51 +670,378 @@
     };
   }
 
+  function unionBox(a, b) {
+    var x1 = Math.min(a.x, b.x);
+    var y1 = Math.min(a.y, b.y);
+    var x2 = Math.max(a.x + a.w, b.x + b.w);
+    var y2 = Math.max(a.y + a.h, b.y + b.h);
+    return { x: x1, y: y1, w: x2 - x1, h: y2 - y1 };
+  }
+
+  function zoomBoxFor(zoneId) {
+    var base = state.baseBox;
+    var focus = zoneBBox(zoneId);
+    if (!base || !focus) return null;
+
+    var gate = travelerGate();
+    var pill = gate ? { x: gate.pill.x - 20, y: gate.pill.y - 12, w: 40, h: 24 } : null;
+    var narrow = window.matchMedia("(max-width: 700px)").matches;
+
+    if (narrow) {
+      // A phone is too narrow for the whole concourse at a readable size.
+      // Show a slice around the seat (and the gate, when it is close) so the
+      // page itself does not have to scroll sideways.
+      var target = focus;
+      if (pill) {
+        var gateCx = pill.x + pill.w / 2;
+        var spotCx = focus.x + focus.w / 2;
+        if (Math.abs(gateCx - spotCx) <= 360) target = unionBox(focus, pill);
+      }
+      var aspect = 1.25;
+      var h = Math.max(240, target.h + 80);
+      var w = Math.max(h * aspect, target.w + 100);
+      h = w / aspect;
+      if (w > 400) {
+        w = 400;
+        h = w / aspect;
+      }
+      if (h > base.h) {
+        h = base.h;
+        w = h * aspect;
+      }
+      return fitBox(base, target, w, h);
+    }
+
+    if (pill) focus = unionBox(focus, pill);
+
+    // Keep both rows of gate numbers in view: never shorter than the holdrooms plus pills.
+    var aspect = base.w / base.h;
+    var hWide = Math.max(190, focus.h + 40);
+    var wWide = Math.max(hWide * aspect, focus.w + 140);
+    hWide = wWide / aspect;
+    if (wWide >= base.w) return { x: base.x, y: base.y, w: base.w, h: base.h };
+    return fitBox(base, focus, wWide, hWide);
+  }
+
   function zoomToZone(zoneId) {
     var box = zoomBoxFor(zoneId);
     if (!box) return;
     state.zoomed = true;
     els.mapReset.hidden = false;
-    animateBox(box);
+    animateBox(box, { refit: true });
   }
 
   function resetZoom() {
     if (!state.baseBox) return;
     state.zoomed = false;
     els.mapReset.hidden = true;
-    animateBox(state.baseBox);
+    animateBox(state.baseBox, { refit: true });
   }
 
-  // ---- Walk route: from the traveler's gate along the hall to the spot ---------
+  function frameRatio() {
+    if (state.frameAspect > 0) return state.frameAspect;
+    return state.baseBox ? state.baseBox.w / state.baseBox.h : MAP_BOX.w / MAP_BOX.h;
+  }
+
+  function viewIsFull(box) {
+    var base = state.baseBox;
+    return !!box && !!base && box.w >= base.w - 1 && box.h >= base.h - 1;
+  }
+
+  // Largest window with the on-screen frame's shape that still fits on the drawing.
+  function maxWindow() {
+    var base = state.baseBox;
+    var aspect = frameRatio();
+    var w = base.w;
+    var h = w / aspect;
+    if (h > base.h) {
+      h = base.h;
+      w = h * aspect;
+    }
+    return { w: w, h: h };
+  }
+
+  function syncZoomTools() {
+    if (!els.zoomIn || !state.box || !state.baseBox) return;
+    var full = viewIsFull(state.box);
+    state.zoomed = !full;
+    els.mapReset.hidden = full;
+    els.zoomIn.disabled = state.box.w <= MIN_VIEW_W + 0.5;
+    els.zoomOut.disabled = full;
+  }
+
+  function clientToSvg(clientX, clientY) {
+    var svg = els.mapHost.querySelector("svg");
+    var box = state.box;
+    if (!svg || !box) return null;
+    var rect = svg.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+    return {
+      x: box.x + (clientX - rect.left) / rect.width * box.w,
+      y: box.y + (clientY - rect.top) / rect.height * box.h
+    };
+  }
+
+  function clampView(x, y, w, h) {
+    var base = state.baseBox;
+    x = Math.max(base.x, Math.min(base.x + base.w - w, x));
+    y = Math.max(base.y, Math.min(base.y + base.h - h, y));
+    return { x: x, y: y, w: w, h: h };
+  }
+
+  // factor < 1 zooms in. mode "step" animates and, from the widest slice,
+  // one more zoom-out shows the whole concourse. mode "live" tracks a pinch or wheel.
+  function zoomBy(factor, anchor, mode, origin) {
+    var box = origin || (mode === "step" && state.zoomTarget) || state.box;
+    var base = state.baseBox;
+    if (!box || !base || !(factor > 0)) return;
+    var aspect = frameRatio();
+    var limits = maxWindow();
+    var atLimit = box.w >= limits.w - 1 && box.h >= limits.h - 1;
+    if (factor > 1 && atLimit) {
+      if (viewIsFull(state.box) || viewIsFull(box)) return;
+      if (mode === "step") animateBox(base, { refit: true, duration: 280 });
+      else applyBox(base);
+      return;
+    }
+    var w = box.w * factor;
+    var h = w / aspect;
+    if (w < MIN_VIEW_W) {
+      w = MIN_VIEW_W;
+      h = w / aspect;
+    }
+    if (w >= limits.w - 0.5 || h >= limits.h - 0.5) {
+      if (limits.w >= base.w - 1 && limits.h >= base.h - 1) {
+        if (mode === "step") animateBox(base, { refit: true, duration: 280 });
+        else applyBox(base);
+        return;
+      }
+      w = limits.w;
+      h = limits.h;
+    }
+    if (!anchor) anchor = { x: box.x + box.w / 2, y: box.y + box.h / 2 };
+    var rx = (anchor.x - box.x) / box.w;
+    var ry = (anchor.y - box.y) / box.h;
+    if (!isFinite(rx)) rx = 0.5;
+    if (!isFinite(ry)) ry = 0.5;
+    var next = clampView(anchor.x - rx * w, anchor.y - ry * h, w, h);
+    if (mode === "step") animateBox(next, { duration: 220 });
+    else applyBox(next);
+  }
+
+  function panBy(fromBox, dxPx, dyPx) {
+    var svg = els.mapHost.querySelector("svg");
+    if (!svg || !fromBox) return;
+    var rect = svg.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    var x = fromBox.x - dxPx / rect.width * fromBox.w;
+    var y = fromBox.y - dyPx / rect.height * fromBox.h;
+    applyBox(clampView(x, y, fromBox.w, fromBox.h));
+  }
+
+  function bindMapGestures() {
+    var pointers = new Map();
+    var gesture = null;
+    var swallowClick = false;
+
+    function pointList() {
+      var list = [];
+      pointers.forEach(function (pt) { list.push(pt); });
+      return list;
+    }
+
+    function beginPinch() {
+      var pts = pointList();
+      if (pts.length < 2 || !state.box) return;
+      var dx = pts[0].x - pts[1].x;
+      var dy = pts[0].y - pts[1].y;
+      gesture = {
+        kind: "pinch",
+        dist: Math.max(1, Math.hypot(dx, dy)),
+        box: { x: state.box.x, y: state.box.y, w: state.box.w, h: state.box.h },
+        mid: clientToSvg((pts[0].x + pts[1].x) / 2, (pts[0].y + pts[1].y) / 2)
+      };
+    }
+
+    els.mapHost.addEventListener("pointerdown", function (event) {
+      if (!state.box || event.button > 0) return;
+      swallowClick = false;
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      stopZoomMotion();
+      state.zoomTarget = null;
+      if (pointers.size >= 2) beginPinch();
+      else {
+        gesture = {
+          kind: "pan",
+          x: event.clientX,
+          y: event.clientY,
+          box: { x: state.box.x, y: state.box.y, w: state.box.w, h: state.box.h },
+          moved: false
+        };
+      }
+    });
+
+    window.addEventListener("pointermove", function (event) {
+      if (!pointers.has(event.pointerId) || !gesture) return;
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      if (gesture.kind === "pinch") {
+        var pts = pointList();
+        if (pts.length < 2) return;
+        event.preventDefault();
+        var dist = Math.max(1, Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y));
+        zoomBy(gesture.dist / dist, gesture.mid, "live", gesture.box);
+        return;
+      }
+      var dx = event.clientX - gesture.x;
+      var dy = event.clientY - gesture.y;
+      if (!gesture.moved && Math.hypot(dx, dy) < 8) return;
+      gesture.moved = true;
+      els.mapHost.classList.add("is-panning");
+      panBy(gesture.box, dx, dy);
+    });
+
+    function endPointer(event) {
+      if (!pointers.has(event.pointerId)) return;
+      pointers.delete(event.pointerId);
+      if (gesture && gesture.kind === "pan" && gesture.moved) swallowClick = true;
+      els.mapHost.classList.remove("is-panning");
+      if (pointers.size >= 2) beginPinch();
+      else if (pointers.size === 1) {
+        var only = pointList()[0];
+        gesture = {
+          kind: "pan",
+          x: only.x,
+          y: only.y,
+          box: state.box ? { x: state.box.x, y: state.box.y, w: state.box.w, h: state.box.h } : null,
+          moved: false
+        };
+      } else gesture = null;
+    }
+
+    window.addEventListener("pointerup", endPointer);
+    window.addEventListener("pointercancel", endPointer);
+
+    els.mapHost.addEventListener("click", function (event) {
+      if (!swallowClick) return;
+      swallowClick = false;
+      event.preventDefault();
+      event.stopPropagation();
+    }, true);
+
+    els.mapHost.addEventListener("wheel", function (event) {
+      if (!state.box) return;
+      event.preventDefault();
+      stopZoomMotion();
+      state.zoomTarget = null;
+      var dy = event.deltaY;
+      if (event.deltaMode === 1) dy *= 16;
+      else if (event.deltaMode === 2) dy *= 40;
+      zoomBy(Math.exp(dy * 0.0016), clientToSvg(event.clientX, event.clientY), "live");
+    }, { passive: false });
+
+    els.zoomIn.addEventListener("click", function () {
+      zoomBy(1 / 1.4, null, "step");
+    });
+    els.zoomOut.addEventListener("click", function () {
+      zoomBy(1.4, null, "step");
+    });
+  }
+
+  // ---- Walk route: the recommend response's node list, drawn on this map -------
+
+  var HALL_NODES = {
+    "B-junction-west": [48, HALL_Y],
+    "B-gates-1-10": [164, HALL_Y],
+    "B-junction-1": [270, HALL_Y],
+    "B-gates-11-20": [423, HALL_Y],
+    "B-junction-2": [577, HALL_Y],
+    "B-gates-21-30": [698, HALL_Y],
+    "B-junction-3": [820, HALL_Y],
+    "B-gates-31-39": [890, HALL_Y],
+    "B-junction-east": [948, HALL_Y]
+  };
+
+  function nodePoint(id) {
+    var zone = zoneDef(id);
+    if (zone) {
+      var geom = zoneGeom(zone);
+      if (geom && geom.ax != null) return [geom.ax, geom.ay];
+      if (geom && geom.cx != null) return [geom.cx, geom.cy];
+    }
+    return HALL_NODES[id] || null;
+  }
+
+  function routePoints(nodeIds) {
+    var pts = [];
+    var gate = travelerGate();
+    var gateZone = zoneIdForGate(state.gate);
+    if (gate && nodeIds[0] === gateZone) {
+      pts.push([gate.x, gate.y]);
+      if (gate.side === "e") pts.push([905, gate.y], [905, HALL_Y]);
+      else pts.push([gate.x, HALL_Y]);
+    }
+    nodeIds.forEach(function (id, i) {
+      if (i === 0 && id === gateZone && gate) return;
+      var point = nodePoint(id);
+      if (!point) return;
+      var last = pts[pts.length - 1];
+      if (!last || last[0] !== point[0] || last[1] !== point[1]) pts.push(point);
+    });
+    return pts;
+  }
+
+  function routeStepText(id, index, last) {
+    var gateZone = zoneIdForGate(state.gate);
+    if (index === 0 && id === gateZone && state.gate) return "Start at gate " + state.gate;
+    if (id.indexOf("junction") !== -1) return "Continue along the concourse hall";
+    if (index === last) return "Arrive at " + placeName(id);
+    return "Pass " + placeName(id);
+  }
+
+  function paintRouteSteps(nodeIds) {
+    if (!els.routeHelp || !els.routeSteps) return;
+    els.routeSteps.replaceChildren();
+    if (!nodeIds || nodeIds.length < 2) {
+      els.routeHelp.hidden = true;
+      return;
+    }
+    var seen = "";
+    nodeIds.forEach(function (id, i) {
+      var text = routeStepText(id, i, nodeIds.length - 1);
+      if (text === seen) return;
+      seen = text;
+      var li = document.createElement("li");
+      li.textContent = text;
+      els.routeSteps.appendChild(li);
+    });
+    els.routeHelp.hidden = els.routeSteps.children.length === 0;
+  }
 
   function paintRoute(spot) {
     var layer = els.mapHost.querySelector("#route-layer");
-    if (!layer) return;
-    layer.replaceChildren();
-    var gate = travelerGate();
-    var zone = spot && state.graph && state.graph.zones.find(function (z) { return z.id === spot.id; });
-    var geom = zone ? zoneGeom(zone) : null;
-    if (!gate || !geom || geom.ax == null) return;
+    if (layer) layer.replaceChildren();
+    var nodeIds = spot && spot.route && spot.route.length ? spot.route : null;
+    paintRouteSteps(nodeIds);
+    if (!layer || !nodeIds) return;
 
-    var pts = [[gate.x, gate.y]];
-    if (gate.side === "e") pts.push([905, gate.y], [905, HALL_Y]);
-    else pts.push([gate.x, HALL_Y]);
-    pts.push([geom.ax, HALL_Y], [geom.ax, geom.ay]);
+    var pts = routePoints(nodeIds);
+    if (pts.length < 2) return;
     var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0] + "," + p[1]; }).join("");
-
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var ns = "http://www.w3.org/2000/svg";
     ["route-casing", "route-line"].forEach(function (cls) {
       var path = document.createElementNS(ns, "path");
-      path.setAttribute("class", cls);
+      path.setAttribute("class", cls + (cls === "route-line" && !reduce ? " is-animated" : ""));
       path.setAttribute("d", d);
       layer.appendChild(path);
     });
-    var end = document.createElementNS(ns, "circle");
-    end.setAttribute("class", "route-end");
-    end.setAttribute("cx", geom.ax);
-    end.setAttribute("cy", geom.ay);
-    end.setAttribute("r", "4.5");
-    layer.appendChild(end);
+    var end = pts[pts.length - 1];
+    var mark = document.createElementNS(ns, "circle");
+    mark.setAttribute("class", "route-end");
+    mark.setAttribute("cx", end[0]);
+    mark.setAttribute("cy", end[1]);
+    mark.setAttribute("r", "4.5");
+    layer.appendChild(mark);
   }
 
   function forecastIndexForZone(zoneId) {
@@ -875,7 +1228,7 @@
     var q = encodeURIComponent(AIRPORT_QUERY);
     els.linkGoogle.href = "https://www.google.com/maps/search/?api=1&query=" + q;
     els.linkApple.href = "https://maps.apple.com/?q=" + q;
-    els.linkGoogle.textContent = "Open Concourse B in Google Maps";
+    els.linkGoogle.textContent = "Google Maps";
     els.linkApple.textContent = "Apple Maps";
   }
 
@@ -1459,6 +1812,20 @@
     els.gate.focus();
   });
   els.mapReset.addEventListener("click", resetZoom);
+  bindMapGestures();
+  var narrowMap = window.matchMedia("(max-width: 700px)");
+  if (narrowMap.addEventListener) {
+    narrowMap.addEventListener("change", function () {
+      if (state.selectedSpotId && state.zoomed) zoomToZone(state.selectedSpotId);
+    });
+  }
+  window.addEventListener("resize", function () {
+    if (state.zoomFrame || !(state.frameAspect > 0)) return;
+    var svg = els.mapHost.querySelector("svg");
+    var width = els.mapHost.clientWidth;
+    if (!svg || width <= 0) return;
+    svg.style.height = (width / state.frameAspect) + "px";
+  });
   els.form.addEventListener("submit", function (event) {
     event.preventDefault();
     var parsed = validate();

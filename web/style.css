@@ -88,8 +88,15 @@
 
 * { box-sizing: border-box; }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   min-height: 100dvh;
   background:
     radial-gradient(1100px 480px at 8% -12%, color-mix(in srgb, var(--pine) 16%, transparent), transparent 58%),
@@ -136,6 +143,7 @@ body {
   font-size: 0.88rem;
   text-align: center;
   border-bottom: 1px solid var(--line);
+  overflow-wrap: break-word;
 }
 
 .banner[hidden] { display: none; }
@@ -170,6 +178,8 @@ body {
   gap: 12px;
   min-width: 0;
 }
+
+.brand > div { min-width: 0; }
 
 .mark {
   color: var(--pine);
@@ -220,6 +230,7 @@ main {
   padding: 16px 16px 28px;
   display: grid;
   gap: 14px;
+  min-width: 0;
 }
 
 .stage { scroll-margin-top: 84px; }
@@ -230,6 +241,8 @@ main {
   border-radius: 18px;
   padding: 18px 16px 16px;
   box-shadow: var(--shadow);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .lede {
@@ -274,11 +287,14 @@ input[type="text"],
 input[type="date"],
 input[type="time"] {
   font: inherit;
+  font-size: 16px;
   color: var(--ink);
   background: var(--field);
   border: 1px solid var(--line);
   border-radius: 12px;
   min-height: 52px;
+  min-width: 0;
+  max-width: 100%;
   padding: 0 14px;
   width: 100%;
 }
@@ -430,6 +446,8 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 0;
+  max-width: 100%;
   padding: 14px 10px;
   background-color: var(--map);
   background-image:
@@ -443,8 +461,16 @@ h2 {
 
 .map-host {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   position: relative;
   z-index: 1;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  /* The map's viewBox is 1010px wide. Without this, that intrinsic width
+     becomes the page width and a phone has to scroll sideways. */
+  contain: inline-size;
 }
 
 .map-host[hidden],
@@ -452,13 +478,46 @@ h2 {
 
 .map-host svg {
   width: 100%;
-  min-width: 720px;
+  max-width: 100%;
   height: auto;
   display: block;
-  max-height: 460px;
+  overflow: hidden;
 }
 
-.map-host { overflow-x: auto; }
+.map-host.is-panning { cursor: grabbing; }
+
+.map-tools {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+
+.map-tools[hidden] { display: none; }
+
+.map-tool {
+  appearance: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.map-tool:hover:not(:disabled) { border-color: var(--pine); }
+
+.map-tool:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
 
 .atl-map text { font-family: var(--sans); pointer-events: none; }
 
@@ -592,6 +651,40 @@ h2 {
 .atl-map .route-casing { stroke: #fff; stroke-width: 8; opacity: 0.9; }
 .atl-map .route-line { stroke: var(--route); stroke-width: 4.5; }
 .atl-map .route-end { fill: var(--route); stroke: #fff; stroke-width: 2; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .atl-map .route-line.is-animated {
+    stroke-dasharray: 8 7;
+    animation: route-march 1.1s linear infinite;
+  }
+}
+
+@keyframes route-march {
+  to { stroke-dashoffset: -30; }
+}
+
+.route-help {
+  margin: 10px 0 0;
+}
+
+.route-help h3 {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.route-steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.92rem;
+}
+
+.route-steps li + li { margin-top: 4px; }
+
+.route-help[hidden] { display: none; }
 
 #map-caption {
   position: relative;
@@ -995,6 +1088,12 @@ footer p { margin: 0; }
 .map-links a:hover { border-color: var(--pine); }
 .map-links a:focus-visible { outline: 2px solid var(--pine); outline-offset: 2px; }
 
+.map-note {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
 .list-title {
   margin: 16px 0 0;
   font-size: 0.72rem;
@@ -1024,9 +1123,41 @@ footer p { margin: 0; }
 
 .map-reset[hidden] { display: none; }
 
-@media (max-width: 520px) {
+@media (max-width: 700px) {
+  .top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-content: stretch;
+    gap: 10px;
+  }
+  .clock { text-align: left; }
+  .when { grid-template-columns: 1fr; }
+  .section-head,
+  .results-head,
+  .forecast-head {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .head-meta {
+    justify-content: flex-start;
+    max-width: 100%;
+  }
+  .kicker,
+  .forecast-for { text-align: left; }
+  .source-badge {
+    white-space: normal;
+    text-align: left;
+  }
+  main { padding-left: 12px; padding-right: 12px; }
+  .card { padding-left: 14px; padding-right: 14px; }
+  .map-frame { padding: 8px 4px; }
+  .map-links a {
+    flex: 1 1 8rem;
+    text-align: center;
+  }
   .pick-stats { grid-template-columns: 1fr 1fr; }
   .pick-stats > div:last-child { grid-column: 1 / -1; }
+  .legend { gap: 6px 12px; }
 }
 
 @media (max-width: 380px) {
@@ -1061,6 +1192,6 @@ footer p { margin: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { scroll-behavior: auto !important; transition: none !important; }
+  * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
   .go:active { transform: none; }
 }
