@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import DISPLAY_TZ
 from app.db import DatabaseUnavailable, connect, departures_by_concourse
-from app.routes import assumptions, forecast, graph, recommend
+from app.routes import ask, assumptions, forecast, graph, photo, recommend
 
 log = logging.getLogger("airport-rest-finder")
 app = FastAPI(title="Airport Rest Finder", docs_url=None, redoc_url=None)
@@ -40,7 +40,7 @@ def summary(hours: float = Query(2.0, gt=0, le=12)) -> dict:
     return {"as_of": now.isoformat(), "tz": DISPLAY_TZ, "hours": hours, **result}
 
 
-for r in (assumptions, forecast, graph, recommend):
+for r in (assumptions, forecast, graph, recommend, photo, ask):
     app.include_router(r.router)
 
 # Static frontend (replace/extend in web/). Mounted last so the API routes above win.

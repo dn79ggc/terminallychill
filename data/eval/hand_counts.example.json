@@ -1,0 +1,4 @@
+{
+  "_comment": "Each photo needs file, count, url, and license. count is the number of people a person counted by hand. Leave photos empty until those counts exist. Do not guess.",
+  "photos": []
+}

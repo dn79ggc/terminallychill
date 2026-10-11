@@ -30,7 +30,8 @@
     zoomFrame: 0,
     zoomTimer: 0,
     zoomTarget: null,
-    frameAspect: 0
+    frameAspect: 0,
+    photoPreviewUrl: null
   };
 
   var AIRPORT_QUERY = "Hartsfield-Jackson Atlanta International Airport";
@@ -91,7 +92,17 @@
     areaInfo: document.getElementById("area-info"),
     warnings: document.getElementById("warnings"),
     spots: document.getElementById("spots"),
-    assumptionsList: document.getElementById("assumptions-list")
+    assumptionsList: document.getElementById("assumptions-list"),
+    photoCount: document.getElementById("photo-count"),
+    photoTitle: document.getElementById("photo-title"),
+    photoHint: document.getElementById("photo-hint"),
+    photoCameraBtn: document.getElementById("photo-camera-btn"),
+    photoFileBtn: document.getElementById("photo-file-btn"),
+    photoCamera: document.getElementById("photo-camera"),
+    photoFile: document.getElementById("photo-file"),
+    photoPreview: document.getElementById("photo-preview"),
+    photoResult: document.getElementById("photo-result"),
+    photoError: document.getElementById("photo-error")
   };
 
   var dateFmt = new Intl.DateTimeFormat("en-US", { timeZone: TZ, weekday: "long", month: "short", day: "numeric" });
@@ -1618,6 +1629,103 @@
     }
   }
 
+  function resetPhoto() {
+    if (state.photoPreviewUrl) {
+      URL.revokeObjectURL(state.photoPreviewUrl);
+      state.photoPreviewUrl = null;
+    }
+    els.photoPreview.hidden = true;
+    els.photoPreview.removeAttribute("src");
+    els.photoPreview.alt = "";
+    els.photoResult.textContent = "";
+    setError(els.photoError, "");
+    els.photoCamera.value = "";
+    els.photoFile.value = "";
+    els.photoCameraBtn.disabled = false;
+    els.photoFileBtn.disabled = false;
+    els.photoCount.hidden = true;
+  }
+
+  function paintPhoto() {
+    var zoneId = zoneIdForGate(state.gate);
+    if (!zoneId || !state.gate) {
+      els.photoCount.hidden = true;
+      return;
+    }
+    els.photoCount.hidden = false;
+    els.photoTitle.textContent = "Count people near gate " + state.gate;
+    els.photoHint.textContent =
+      "Take or upload one photo of " + placeName(zoneId) +
+      ". The count adjusts that area's crowd estimate for 30 minutes, then fades. The photo is not saved.";
+  }
+
+  function photoErrorMessage(err) {
+    var msg = err && err.message ? err.message : "The photo could not be counted.";
+    if (msg === "database unavailable") {
+      return "The flight database is not reachable, so this photo could not update the crowd estimate.";
+    }
+    if (msg === "Person detector is not configured.") {
+      return "The person counter is not available on this server.";
+    }
+    return msg;
+  }
+
+  async function sendPhoto(file) {
+    var zoneId = zoneIdForGate(state.gate);
+    if (!file || !zoneId) return;
+    setError(els.photoError, "");
+    if (file.size > 5 * 1024 * 1024) {
+      els.photoResult.textContent = "";
+      setError(els.photoError, "That photo is larger than 5 MB.");
+      return;
+    }
+    if (file.type && file.type.indexOf("image/") !== 0 && file.type !== "application/octet-stream") {
+      els.photoResult.textContent = "";
+      setError(els.photoError, "Choose an image file.");
+      return;
+    }
+    if (state.photoPreviewUrl) URL.revokeObjectURL(state.photoPreviewUrl);
+    state.photoPreviewUrl = URL.createObjectURL(file);
+    els.photoPreview.src = state.photoPreviewUrl;
+    els.photoPreview.alt = "Photo of " + placeName(zoneId);
+    els.photoPreview.hidden = false;
+    els.photoResult.textContent = "Counting…";
+    els.photoCameraBtn.disabled = true;
+    els.photoFileBtn.disabled = true;
+    var body = new FormData();
+    body.append("zone_id", zoneId);
+    body.append("image", file, "photo.jpg");
+    try {
+      var result = await fetchJson("/api/photo", { method: "POST", body: body });
+      var people = result.count === 1 ? "1 person" : result.count + " people";
+      els.photoResult.textContent =
+        "Counted " + people + ". The crowd index for " + placeName(result.zone_id) +
+        " is " + result.adjusted_index + " right now. This fades over 30 minutes.";
+      if (!MOCK && !state.usingMock) {
+        try {
+          var startIso = new Date().toISOString();
+          state.forecast = await fetchJson(
+            "/api/forecast?concourse=" + encodeURIComponent(DEMO_CONCOURSE) +
+            "&start=" + encodeURIComponent(startIso) +
+            "&hours=3"
+          );
+          paintHeatmap();
+          if (state.inspectedZoneId) paintAreaInfo(state.inspectedZoneId, { quiet: true });
+        } catch (refreshErr) {
+          /* The count is already shown. The map keeps the forecast from the search. */
+        }
+      }
+    } catch (err) {
+      els.photoResult.textContent = "";
+      setError(els.photoError, photoErrorMessage(err));
+    } finally {
+      els.photoCameraBtn.disabled = false;
+      els.photoFileBtn.disabled = false;
+      els.photoCamera.value = "";
+      els.photoFile.value = "";
+    }
+  }
+
   async function runSearch(gate, boarding) {
     state.gate = gate;
     state.boarding = boarding;
@@ -1628,6 +1736,7 @@
     state.dataSource = null;
     paintAreaInfo(null);
     announceResults("");
+    resetPhoto();
     els.go.disabled = true;
     els.go.textContent = "Finding…";
     setError(els.formError, "");
@@ -1713,6 +1822,7 @@
       paintHeatmap();
       paintSpots();
       paintSource();
+      paintPhoto();
       els.formStatus.textContent = "Results ready for gate " + gate + ".";
       var pick = selectedSpot();
       announceResults(
@@ -1825,6 +1935,18 @@
     var width = els.mapHost.clientWidth;
     if (!svg || width <= 0) return;
     svg.style.height = (width / state.frameAspect) + "px";
+  });
+  els.photoCameraBtn.addEventListener("click", function () {
+    els.photoCamera.click();
+  });
+  els.photoFileBtn.addEventListener("click", function () {
+    els.photoFile.click();
+  });
+  els.photoCamera.addEventListener("change", function () {
+    if (els.photoCamera.files && els.photoCamera.files[0]) sendPhoto(els.photoCamera.files[0]);
+  });
+  els.photoFile.addEventListener("change", function () {
+    if (els.photoFile.files && els.photoFile.files[0]) sendPhoto(els.photoFile.files[0]);
   });
   els.form.addEventListener("submit", function (event) {
     event.preventDefault();

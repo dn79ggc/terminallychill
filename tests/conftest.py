@@ -18,3 +18,12 @@ def db_url(monkeypatch):
         conn.execute(SQL_001)
     monkeypatch.setenv("DATABASE_URL", url)
     return url
+
+
+@pytest.fixture(autouse=True)
+def _clear_photo_counts():
+    from app.counts import reset_counts
+
+    reset_counts()
+    yield
+    reset_counts()

@@ -20,3 +20,11 @@ aeroapi_atl_sample.json
 .DS_Store
 .review/
 web/_probe/
+
+# Person-detector weights and architecture. Source and license: data/models/SOURCE.md
+data/models/*
+!data/models/SOURCE.md
+
+# Hand-counted photos for the counter check. The example manifest is committed empty.
+data/eval/photos/
+data/eval/hand_counts.json

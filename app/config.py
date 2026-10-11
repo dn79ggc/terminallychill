@@ -24,6 +24,9 @@ class Settings:
     aviationstack_max_pages: int
     raw_dir: Path
     raw_retention_days: int
+    person_model_dir: str
+    gemini_api_key: str | None
+    gemini_model: str
 
 
 def get_settings() -> Settings:
@@ -37,4 +40,7 @@ def get_settings() -> Settings:
         aviationstack_max_pages=int(os.environ.get("AVIATIONSTACK_MAX_PAGES") or 3),
         raw_dir=Path(os.environ.get("RAW_DIR") or "data/raw"),
         raw_retention_days=30,
+        person_model_dir=(os.environ.get("PERSON_MODEL_DIR") or "").strip(),
+        gemini_api_key=os.environ.get("GEMINI_API_KEY") or None,
+        gemini_model=(os.environ.get("GEMINI_MODEL") or "gemini-3.8-flash").strip(),
     )

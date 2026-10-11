@@ -38,3 +38,10 @@ Without it, the database tests are skipped.
 - The public API returns per-concourse counts only.
 - Provider terms (AeroAPI Personal: personal/academic use, raw data <= 30 days, no mixing with other real-time providers)
   are why the ingest uses one provider per run and prunes raw files.
+
+## Person counter
+
+A photo sent to `POST /api/photo` is counted in memory and discarded. The server keeps only a timestamp, a zone id, and a count, and drops that record after 30 minutes. There is no photo table.
+
+No accuracy number is reported yet. Hand-counted photos have not been added. `scripts/eval_counter.py` reads `data/eval/hand_counts.json` and will not guess counts. The detector files and their license are recorded in `data/models/SOURCE.md`.
+

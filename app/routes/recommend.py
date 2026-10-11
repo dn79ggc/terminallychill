@@ -6,8 +6,8 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.assumptions import get_assumptions
+from app.counts import forecast_with_corrections
 from app.graph import get_graph
-from app.model import forecast as build_forecast
 from app.ranking import rank
 from app.routes.deps import FlightLoader, get_flight_loader, load_or_503
 from app.timeutil import require_aware
@@ -34,7 +34,7 @@ def recommend(
     graph = get_graph()
     assumptions = get_assumptions()
     try:
-        built = build_forecast(loaded.flights, graph, assumptions, now, hours)
+        built = forecast_with_corrections(loaded.flights, graph, assumptions, now, hours, now)
         result = rank(gate, boarding, now, built, graph, assumptions, limit=limit)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from None
