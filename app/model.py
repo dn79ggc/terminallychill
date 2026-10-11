@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta
 
 from app.assumptions import Assumptions, seats_for
@@ -19,6 +19,7 @@ class ZoneForecast:
     label: str
     capacity: int
     index: list[int]
+    people: list[float] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -41,6 +42,16 @@ class Forecast:
         series = self.zone(zone_id).index
         if not series:
             return 0
+        when = require_aware(when, "when")
+        elapsed = (when - self.start).total_seconds() / 60
+        bucket = int(elapsed // self.bucket_minutes)
+        return series[min(max(bucket, 0), len(series) - 1)]
+
+    def people_at(self, zone_id: str, when: datetime) -> float:
+        """Unscaled flow-model people in the zone. Not part of the public response."""
+        series = self.zone(zone_id).people
+        if not series:
+            return 0.0
         when = require_aware(when, "when")
         elapsed = (when - self.start).total_seconds() / 60
         bucket = int(elapsed // self.bucket_minutes)
@@ -110,6 +121,7 @@ def forecast(
             zone.label,
             zone.capacity,
             [_index(people[zone.id][i], zone.capacity, multipliers.get(zone.id, 1.0)) for i in range(buckets)],
+            list(people[zone.id]),
         )
         for zone in graph.zones.values()
     ]

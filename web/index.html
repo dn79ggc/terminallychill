@@ -114,6 +114,21 @@
     <ol class="spots" id="spots"></ol>
     <p class="fine">Walk times and leave-by times are estimates.</p>
 
+    <section class="photo-count" id="photo-count" hidden aria-labelledby="photo-title">
+      <p class="pick-label" id="photo-kicker">This gate area</p>
+      <h3 class="photo-title" id="photo-title">Count people here</h3>
+      <p class="hint" id="photo-hint">Take or upload one photo of the gate area. The count adjusts that area's crowd estimate for 30 minutes, then fades. The photo is not saved.</p>
+      <div class="photo-actions">
+        <button type="button" class="go" id="photo-camera-btn">Take a photo</button>
+        <button type="button" class="edit-btn photo-upload" id="photo-file-btn">Upload a photo</button>
+      </div>
+      <input id="photo-camera" class="sr-only" type="file" accept="image/*" capture="environment" aria-label="Take a photo of this gate area">
+      <input id="photo-file" class="sr-only" type="file" accept="image/*" aria-label="Upload a photo of this gate area">
+      <img id="photo-preview" class="photo-preview" alt="" hidden>
+      <p class="photo-result" id="photo-result" role="status"></p>
+      <p class="error" id="photo-error" role="alert" hidden></p>
+    </section>
+
     <details class="about-forecasts" id="about-forecasts">
       <summary>About these forecasts</summary>
       <div class="about-body">
