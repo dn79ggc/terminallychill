@@ -5,10 +5,16 @@ download URL and the MIT license. This module does not claim a measured accuracy
 """
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
-import cv2
-import numpy as np
+# A small PNG can declare a huge pixel count (0.3 MB -> 100 Mpx -> about 300 MB decoded).
+# OpenCV reads this limit lazily, so it must be set before the first decode.
+# 40 Mpx still allows a 12 to 48 MP phone photo.
+os.environ.setdefault("OPENCV_IO_MAX_IMAGE_PIXELS", "40000000")
+
+import cv2  # noqa: E402
+import numpy as np  # noqa: E402
 
 from app.config import get_settings
 
@@ -58,7 +64,10 @@ def decode_image(data: bytes):
     if not data:
         raise ValueError("not an image")
     array = np.frombuffer(data, dtype=np.uint8)
-    image = cv2.imdecode(array, cv2.IMREAD_COLOR)
+    try:
+        image = cv2.imdecode(array, cv2.IMREAD_COLOR)
+    except cv2.error:
+        raise ValueError("not an image") from None
     if image is None or image.size == 0:
         raise ValueError("not an image")
     return image

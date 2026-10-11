@@ -117,3 +117,16 @@ def test_photo_rejects_a_non_image_an_unknown_zone_and_a_large_file(client):
     )
     assert too_big.status_code == 413
     assert latest_counts(datetime.now(timezone.utc) + timedelta(seconds=1)) == []
+
+
+def test_photo_rejects_a_small_file_with_a_huge_pixel_count(client):
+    """A 100 Mpx PNG is well under 5 MB. It must be refused, not decoded."""
+    ok, encoded = cv2.imencode(".png", np.zeros((10000, 10000, 3), dtype=np.uint8))
+    assert ok and len(encoded) < 5 * 1024 * 1024
+    response = client.post(
+        "/api/photo",
+        data={"zone_id": "B-gates-1-10"},
+        files={"image": ("bomb.png", encoded.tobytes(), "image/png")},
+    )
+    assert response.status_code == 422
+    assert latest_counts(datetime.now(timezone.utc) + timedelta(seconds=1)) == []

@@ -41,7 +41,7 @@ Without it, the database tests are skipped.
 
 ## Person counter
 
-A photo sent to `POST /api/photo` is counted in memory and discarded. The server keeps only a timestamp, a zone id, and a count, and drops that record after 30 minutes. There is no photo table.
+A photo sent to `POST /api/photo` is counted in memory and never stored. Uploads over 1 MB may be held briefly in a temporary file by the web framework, which deletes it when the request ends. The server keeps only a timestamp, a zone id, and a count, and drops that record after 30 minutes. There is no photo table. Images over 40 megapixels are rejected.
 
 No accuracy number is reported yet. Hand-counted photos have not been added. `scripts/eval_counter.py` reads `data/eval/hand_counts.json` and will not guess counts. The detector files and their license are recorded in `data/models/SOURCE.md`.
 
