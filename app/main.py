@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import DISPLAY_TZ
 from app.db import DatabaseUnavailable, connect, departures_by_concourse
+from app.routes import assumptions, forecast, graph, recommend
 
 log = logging.getLogger("airport-rest-finder")
 app = FastAPI(title="Airport Rest Finder", docs_url=None, redoc_url=None)
@@ -38,6 +39,9 @@ def summary(hours: float = Query(2.0, gt=0, le=12)) -> dict:
         raise HTTPException(status_code=503, detail="database unavailable") from None
     return {"as_of": now.isoformat(), "tz": DISPLAY_TZ, "hours": hours, **result}
 
+
+for r in (assumptions, forecast, graph, recommend):
+    app.include_router(r.router)
 
 # Static frontend (replace/extend in web/). Mounted last so the API routes above win.
 WEB_DIR = Path(__file__).resolve().parents[1] / "web"
