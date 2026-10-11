@@ -11,12 +11,16 @@
 <body>
 <a class="skip" href="#trip">Skip to gate and boarding time</a>
 
+<div id="mock-banner" class="banner mock-banner" hidden role="status">
+  Demo mode. These values are for testing — not live airport data.
+</div>
+
 <header class="topbar">
   <div class="top">
     <div class="brand">
       <svg class="mark" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
         <rect width="36" height="36" rx="10" fill="currentColor"/>
-        <path d="M9 24.5h18M12 24.5v-5.5a6 6 0 0 1 12 0v5.5" fill="none" stroke="#f6f3ec" stroke-width="2" stroke-linecap="round"/>
+        <path d="M9 24.5h18M12 24.5v-5.5a6 6 0 0 1 12 0v5.5" fill="none" stroke="var(--on-pine)" stroke-width="2" stroke-linecap="round"/>
       </svg>
       <div>
         <p class="eyebrow">Terminally Chill · ATL</p>
@@ -30,7 +34,7 @@
   </div>
 </header>
 
-<main>
+<main id="app" data-view="input">
   <form id="trip" class="card trip" novalidate>
     <p class="lede">A place to rest close enough to your gate that you will not miss your flight.</p>
 
@@ -40,13 +44,13 @@
         <input id="gate" name="gate" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="4" placeholder="B22" required aria-describedby="gate-hint gate-error">
         <span class="concourse-chip" id="concourse-chip" hidden><span class="sr-only">Concourse </span><span id="concourse-letter"></span></span>
       </div>
-      <p class="hint" id="gate-hint">Concourse letter and number. T, A, B, C, D, E, or F.</p>
+      <p class="hint" id="gate-hint">Concourse B for this demo — for example B12 or B22.</p>
       <p class="error" id="gate-error" role="alert" hidden></p>
     </div>
 
     <fieldset class="field">
       <legend>Boarding time</legend>
-      <p class="hint" id="board-hint">Atlanta time (Eastern).</p>
+      <p class="hint" id="board-hint">Enter your boarding date and time (Atlanta local time).</p>
       <div class="when">
         <div>
           <label for="board-date">Date</label>
@@ -57,68 +61,110 @@
           <input id="board-time" name="board-time" type="time" required aria-describedby="board-hint board-readout board-error">
         </div>
       </div>
-      <p class="readout" id="board-readout" aria-live="polite"><span id="board-when"></span><span id="board-until"></span></p>
+      <p class="readout" id="board-readout" aria-live="polite"></p>
       <p class="error" id="board-error" role="alert" hidden></p>
     </fieldset>
 
-    <button type="submit" class="go">Find quiet spots</button>
+    <button type="submit" class="go" id="go-btn">Find quiet spots</button>
+    <p class="scope-note" id="scope-note" role="status" hidden></p>
+    <p class="error" id="form-error" role="alert" hidden></p>
     <p class="sr-only" id="form-status" role="status"></p>
   </form>
 
-  <section class="card stage" id="stage" aria-labelledby="map-title">
-    <div class="section-head">
-      <h2 id="map-title">Concourse map</h2>
-      <p class="kicker" id="map-kicker">Waiting for a gate</p>
+  <section class="card results" id="results" aria-labelledby="results-title" hidden>
+    <div class="results-head">
+      <div>
+        <p class="kicker-left" id="spots-kicker">Your trip</p>
+        <h2 id="results-title">Quiet spots</h2>
+      </div>
+      <button type="button" class="edit-btn" id="edit-btn">Edit</button>
     </div>
-    <div class="map-frame" id="map-frame">
-      <p id="map-caption">The schematic for your concourse will appear here, with zones colored by the crowd forecast.</p>
-    </div>
-    <ul class="legend" aria-label="Crowd colors">
-      <li><span class="swatch quiet" aria-hidden="true"></span>Quiet</li>
-      <li><span class="swatch moderate" aria-hidden="true"></span>Moderate</li>
-      <li><span class="swatch busy" aria-hidden="true"></span>Busy</li>
-    </ul>
-    <div class="time-slot">
-      <span>Now</span>
-      <input id="forecast-time" type="range" min="0" max="36" value="0" disabled aria-label="Forecast time" aria-describedby="forecast-hint">
-      <span>Later</span>
-    </div>
-    <p class="hint" id="forecast-hint">The slider will move through the crowd forecast.</p>
+
+    <p class="spots-status" id="spots-status">Enter a gate and boarding time to see quiet places nearby.</p>
+    <ul id="warnings" class="warnings" hidden></ul>
+
+    <article class="pick" id="pick" aria-live="polite" hidden>
+      <p class="pick-label" id="pick-label">Closest quiet space</p>
+      <h3 class="pick-name" id="pick-name"></h3>
+      <dl class="pick-stats">
+        <div>
+          <dt>Walk from gate</dt>
+          <dd id="pick-walk">—</dd>
+        </div>
+        <div>
+          <dt>Leave by</dt>
+          <dd id="pick-leave">—</dd>
+          <dd class="pick-countdown" id="pick-countdown">—</dd>
+        </div>
+        <div>
+          <dt>Crowd now</dt>
+          <dd id="pick-crowd">—</dd>
+        </div>
+      </dl>
+      <p class="pick-note" id="pick-note"></p>
+      <div class="map-links" id="map-links">
+        <a id="link-google" href="#" target="_blank" rel="noopener noreferrer">Google Maps</a>
+        <a id="link-apple" href="#" target="_blank" rel="noopener noreferrer">Apple Maps</a>
+      </div>
+    </article>
+
+    <h3 class="list-title" id="list-title" hidden>All quiet spots</h3>
+    <ol class="spots" id="spots" aria-live="polite"></ol>
+    <p class="fine">Walk times and leave-by times are estimates.</p>
+
+    <details class="about-forecasts" id="about-forecasts">
+      <summary>About these forecasts</summary>
+      <div class="about-body">
+        <p id="about-source">Source details appear after you search.</p>
+        <ul class="about-limits" id="about-limits">
+          <li>This demo focuses on ATL Concourse B (gates B1–B39).</li>
+          <li>Colors show estimated crowd levels from flight schedules, not measured noise or live sensors.</li>
+          <li>Recommendations favor less crowded seating areas with enough time to walk back.</li>
+          <li>Walking times and leave-by times are estimates. Check airport monitors for gate changes.</li>
+          <li>SAMPLE DATA means demo or recorded flights, not a live AeroAPI feed.</li>
+        </ul>
+        <p class="about-heading">Assumptions <span id="about-assumptions-version" class="about-version"></span></p>
+        <ul id="assumptions-list" class="assumptions"></ul>
+        <p class="hint" id="assumptions-empty">Assumption details appear when the forecast service is available.</p>
+      </div>
+    </details>
   </section>
 
-  <section class="card spots-panel" aria-labelledby="spots-title">
+  <section class="card stage" id="stage" aria-labelledby="map-title">
     <div class="section-head">
-      <h2 id="spots-title">Quiet spots</h2>
-      <p class="kicker" id="spots-kicker">Ranked for your gate</p>
+      <h2 id="map-title">Concourse B</h2>
+      <div class="head-meta">
+        <button type="button" class="map-reset" id="map-reset" hidden>Full concourse</button>
+        <p class="source-badge" id="source-badge" hidden>
+          <span class="source-value" id="source-badge-value">Not loaded</span>
+        </p>
+        <p class="kicker" id="map-kicker">ATL</p>
+      </div>
     </div>
-    <p class="spots-status" id="spots-status">Enter a gate and boarding time. The closest quiet places will be listed here, each with a walk time and a leave-by time.</p>
-    <ol class="spots is-template" aria-hidden="true">
-      <li class="spot">
-        <span class="rank">1</span>
-        <div class="spot-body">
-          <p class="spot-name">Quiet spot</p>
-          <p class="spot-meta">How quiet · walk to your gate</p>
-        </div>
-        <p class="leave"><span>Leave by</span><strong>—</strong></p>
-      </li>
-      <li class="spot">
-        <span class="rank">2</span>
-        <div class="spot-body">
-          <p class="spot-name">Quiet spot</p>
-          <p class="spot-meta">How quiet · walk to your gate</p>
-        </div>
-        <p class="leave"><span>Leave by</span><strong>—</strong></p>
-      </li>
-      <li class="spot">
-        <span class="rank">3</span>
-        <div class="spot-body">
-          <p class="spot-name">Quiet spot</p>
-          <p class="spot-meta">How quiet · walk to your gate</p>
-        </div>
-        <p class="leave"><span>Leave by</span><strong>—</strong></p>
-      </li>
-    </ol>
-    <p class="fine">Walk times and leave-by times are estimates.</p>
+
+    <div class="map-frame" id="map-frame">
+      <div id="map-host" class="map-host" hidden></div>
+      <p id="map-caption">Loading Concourse B…</p>
+    </div>
+
+    <ul class="legend" aria-label="Crowd colors">
+      <li><span class="swatch quiet" aria-hidden="true"></span>Less crowded</li>
+      <li><span class="swatch moderate" aria-hidden="true"></span>Moderate</li>
+      <li><span class="swatch busy" aria-hidden="true"></span>Busy</li>
+      <li><span class="swatch unknown" aria-hidden="true"></span>No estimate</li>
+    </ul>
+
+    <div class="forecast-control">
+      <div class="forecast-head">
+        <label for="horizon">Crowd forecast</label>
+        <p class="forecast-for" id="forecast-for" aria-live="polite">Forecast for —</p>
+      </div>
+      <div class="time-slot">
+        <span>Now</span>
+        <input id="horizon" type="range" min="0" max="0" value="0" step="1" disabled aria-describedby="forecast-for">
+        <span>Later</span>
+      </div>
+    </div>
   </section>
 </main>
 

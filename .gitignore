@@ -18,3 +18,5 @@ aeroapi_atl_sample.json
 # Misc
 *.log
 .DS_Store
+.review/
+web/_probe/
